@@ -1,9 +1,9 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-@app.route("/")
-def pagestart():
-    return render_template('index.html')
-if __name__ == "__main__":
-    app.run(debug=True)
+app.config['SQLALCHEMY_DATABASE_URI']='postgresql://postgres:natlanmap39@localhost/students'
+
+db=SQLAlchemy(app)
+#https://www.youtube.com/watch?v=XZ_gAWdGzZk
