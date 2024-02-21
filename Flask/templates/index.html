@@ -20,10 +20,10 @@
         <tr>
             <script>let currow = 0;
             </script>
-            <td><button onclick="enterfirstname(currow)" id='testclass1'>Enter your first name</button></td>
-            <td><button onclick="enterlastname(currow)" id='testclass2'>Enter your last name</button></td>
-            <td><button onclick="entermail(currow)" id='testclass3'>Enter your mail</button></td>
-            <td><button onclick="enteraddress(currow)" id='testclass4'>Enter your address</button></td>
+            <td><button onclick="enterfirstname(mainid1)" id='testclass1'>Enter your first name</button></td>
+            <td><button onclick="enterlastname(mainid2)" id='testclass2'>Enter your last name</button></td>
+            <td><button onclick="entermail(mainid3)" id='testclass3'>Enter your mail</button></td>
+            <td><button onclick="enteraddress(mainid4)" id='testclass4'>Enter your address</button></td>
             <script>
                 let mainid1 = "x" + currow + "1";
                 let mainid2 = "x" + currow + "2";
@@ -48,8 +48,9 @@
         let address = [""];
         let alldata = [firstname, lastname, mail, address];
         let output = "Please enter all your data before exporting";
-        function enterfirstname(currow) {
+        function enterfirstname(main) {
             const inputname = prompt("What is your first name?");
+            currow = deconstruct(main);
             alldata[0][currow] = inputname;
             mainid1 = "x" + currow + "1";
             console.log(currow + " is currow");
@@ -59,37 +60,40 @@
             console.log(curdoc);
             curdoc[0].innerText = alldata[0][currow];
             document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
         }
-        function enterlastname(currow) {
+        function enterlastname(main) {
             const inputname = prompt("What is your last name?");
+            currow = deconstruct(main);
             alldata[1][currow] = inputname;
             mainid2 = "x" + currow + "2";
             curdoc = document.querySelectorAll("." + mainid2);
             console.log(curdoc[0]);
             curdoc[0].innerText = alldata[1][currow];
             document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
         }
-        function entermail(currow) {
+        function entermail(main) {
             const inputname = prompt("What is your E-mail Address?");
+            currow = deconstruct(main);
             alldata[2][currow] = inputname;
             mainid3 = "x" + currow + "3";
             curdoc = document.querySelectorAll("." + mainid3);
             console.log(curdoc[0]);
             curdoc[0].innerText = alldata[2][currow];
             document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
         }
-        function enteraddress(currow) {
+        function enteraddress(main) {
             const inputname = prompt("What is your Address?");
+            currow = deconstruct(main);
             alldata[3][currow] = inputname;
             mainid4 = "x" + currow + "4";
             curdoc = document.querySelectorAll("." + mainid4);
             console.log(curdoc[0]);
             curdoc[0].innerText = alldata[3][currow];
             document.getElementById("outputid").innerHTML = getmissing();
-        }
-        function giveData() {
-            let userdata = [alldata[0][0], alldata[1][0], alldata[2][0], alldata[3][0]]
-            console.log(userdata);
+            console.log(main);
         }
         function isClear(userdata, number) {
             output = 0;
@@ -152,13 +156,13 @@
                 currow++;
                 console.log('currow has been updated');
                 mainid1 = "x" + currow + "1";
-                cell1.innerHTML = "<td><button onclick='enterfirstname(currow)' id = 'testclass1' >Enter your first name</button></td>";
+                cell1.innerHTML = "<td><button onclick='enterfirstname(mainid1)' id = 'testclass1' >Enter your first name</button></td>";
                 mainid2 = "x" + currow + "2";
-                cell2.innerHTML = "<td><button onclick='enterlastname(currow)' id = 'testclass2' >Enter your last name</button></td>";
+                cell2.innerHTML = "<td><button onclick='enterlastname(mainid2)' id = 'testclass2' >Enter your last name</button></td>";
                 mainid3 = "x" + currow + "3";
-                cell3.innerHTML = "<td><button onclick='entermail(currow)' id = 'testclass3' >Enter your mail</button></td>";
+                cell3.innerHTML = "<td><button onclick='entermail(mainid3)' id = 'testclass3' >Enter your mail</button></td>";
                 mainid4 = "x" + currow + "4";
-                cell4.innerHTML = "<td><button onclick='enteraddress(currow)' id = 'testclass4' >Enter your address</button></td>";
+                cell4.innerHTML = "<td><button onclick='enteraddress(mainid4)' id = 'testclass4' >Enter your address</button></td>";
                 document.getElementById("testclass1").classList = mainid1;
                 document.getElementById("testclass2").classList = mainid2;
                 document.getElementById("testclass3").classList = mainid3;
@@ -169,23 +173,57 @@
                 document.getElementById("testclass4").id = "dump";
             }
             return output;
-
         }
         function eled(){
-            console.log('user wants to change');
             const row = prompt('Please specify the targeted elements row');
-            const column = prompt('Please specify the targeted elements row');
+            const column = prompt('Please specify the targeted elements column');
+            newid = 'x' + (row-1) + (column);
+            curdoc = document.querySelectorAll("." + newid);
+            console.log(curdoc[0] + 'is curdoc0');
+            var table = document.getElementById("contenttable");
+            var rowcount = table.rows.length;
+            console.log(rowcount + 'is the row count');
+            if(curdoc == [] || curdoc[0] == undefined){
+                console.log('That is not valid');
+                document.getElementById('genwarn').innerText = 'Warning: Entered Column / Row Combo does not exist. Please enter a valid combination!';
+            }
+            else if(row == rowcount-1){
+                console.log('That is not valid');
+                document.getElementById('genwarn').innerText = 'Warning: Please complete the chosen row before editing!';
+            }
+            else{
+                const inputname = prompt("What is your new element?");
+                alldata[column][row-1] = inputname;
+                curdoc[0].innerText = inputname;
+                console.log(newid);
+                document.getElementById('genwarn').innerText = '';
+            }
         }
+        function deconstruct(id){
+            out = id.toString().charAt(1)
+            console.log(id + " is id");
+            return out
+        }
+        
     </script>
     <p id="outputid"></p>
     <script>document.getElementById("outputid").innerHTML = output</script>
     <button onclick="eled()">Edit an element</button>
-    <a href="userdata" download=""><button onclick="giveData()">Export this table</button></a>
+
+    <form action="http://localhost:5000/login" method = "post">
+        <p><input type="submit" value = "Export this table"></p>
+    </form>
+
+    <p id='genwarn'></p>
 </body>
 
 </html>
 
-<!-- implement login
-Improve  element editing
-implement export
-implement central database-->
+<!-- 
+Implement login
+Element editing by clicking on the element?
+Implement export
+Implement central database
+Add Column Feature
+Upload file as input
+-->
