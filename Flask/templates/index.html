@@ -12,10 +12,10 @@
     <table id="contenttable">
         <caption></caption>
         <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Mail</th>
-            <th>Address</th>
+            <th id="headfirst">First Name</th>
+            <th id="headsecond">Last Name</th>
+            <th id="headthird">Mail</th>
+            <th id="headfourth">Address</th>
         </tr>
         <tr>
             <script>let currow = 0;
@@ -61,6 +61,7 @@
             curdoc[0].innerText = alldata[0][currow];
             document.getElementById("outputid").innerHTML = getmissing();
             console.log(main);
+            send();
         }
         function enterlastname(main) {
             const inputname = prompt("What is your last name?");
@@ -72,6 +73,7 @@
             curdoc[0].innerText = alldata[1][currow];
             document.getElementById("outputid").innerHTML = getmissing();
             console.log(main);
+            send();
         }
         function entermail(main) {
             const inputname = prompt("What is your E-mail Address?");
@@ -83,6 +85,7 @@
             curdoc[0].innerText = alldata[2][currow];
             document.getElementById("outputid").innerHTML = getmissing();
             console.log(main);
+            send();
         }
         function enteraddress(main) {
             const inputname = prompt("What is your Address?");
@@ -94,11 +97,12 @@
             curdoc[0].innerText = alldata[3][currow];
             document.getElementById("outputid").innerHTML = getmissing();
             console.log(main);
+            send();
         }
         function isClear(userdata, number) {
             output = 0;
             for (let i = number - 1; i > 0; i--) {
-                if (userdata[i - 1] == "" || userdata[i -1] == undefined) {
+                if (userdata[i - 1] == "" || userdata[i - 1] == undefined) {
                     output++;
                 }
             }
@@ -174,56 +178,92 @@
             }
             return output;
         }
-        function eled(){
+        function eled() {
             const row = prompt('Please specify the targeted elements row');
             const column = prompt('Please specify the targeted elements column');
-            newid = 'x' + (row-1) + (column);
+            newid = 'x' + (row - 1) + (column);
             curdoc = document.querySelectorAll("." + newid);
             console.log(curdoc[0] + 'is curdoc0');
             var table = document.getElementById("contenttable");
             var rowcount = table.rows.length;
             console.log(rowcount + 'is the row count');
-            if(curdoc == [] || curdoc[0] == undefined){
+            if (curdoc == [] || curdoc[0] == undefined) {
                 console.log('That is not valid');
                 document.getElementById('genwarn').innerText = 'Warning: Entered Column / Row Combo does not exist. Please enter a valid combination!';
             }
-            else if(row == rowcount-1){
+            else if (row == rowcount - 1) {
                 console.log('That is not valid');
                 document.getElementById('genwarn').innerText = 'Warning: Please complete the chosen row before editing!';
             }
-            else{
+            else {
                 const inputname = prompt("What is your new element?");
-                alldata[column][row-1] = inputname;
+                alldata[column-1][row - 1] = inputname;
                 curdoc[0].innerText = inputname;
                 console.log(newid);
                 document.getElementById('genwarn').innerText = '';
             }
+            send();
         }
-        function deconstruct(id){
+        function deconstruct(id) {
             out = id.toString().charAt(1)
             console.log(id + " is id");
             return out
         }
-        
+        function createrealalldata() {
+            head = [document.getElementById('headfirst').innerHTML, document.getElementById('headsecond').innerHTML, document.getElementById('headthird').innerHTML, document.getElementById('headfourth').innerHTML];
+            let realalldata = []
+            realalldata.push(head);
+            for (let i = 0; i < alldata[0].length; i++) {
+                console.log(alldata[0].length);
+                let innerlist = [];
+                for (let ii = 0; ii < alldata.length; ii++) {
+                    innerlist.push(alldata[ii][i])
+                }
+                realalldata.push(innerlist);
+                console.log('something happened');
+            }
+            console.log(realalldata);
+            return realalldata;
+        }
+        function send() {
+            let variable = createrealalldata();
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/login";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            //xhr.onload = function () {};
+
+            var data = new FormData();
+            data.append('user', 'person');
+            data.append('pwd', 'password');
+
+            let realdata = JSON.stringify(variable)
+
+            xhr.send(realdata);
+        }
     </script>
     <p id="outputid"></p>
     <script>document.getElementById("outputid").innerHTML = output</script>
     <button onclick="eled()">Edit an element</button>
 
-    <form action="http://localhost:5000/login" method = "post">
-        <p><input type="submit" value = "Export this table"></p>
-    </form>
-
     <p id='genwarn'></p>
+
+    <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
+
+    <p>Todo:</p>
+    <p>Fix early myfiles: useless linebreaks</p>
+    <p>Implement login</p>
+    <p>Element editing by clicking on the element?</p>
+    <p>Implement central database</p>
+    <p>Add Column Feature</p>
+
 </body>
 
 </html>
 
 <!-- 
-Implement login
-Element editing by clicking on the element?
-Implement export
-Implement central database
-Add Column Feature
-Upload file as input
+
 -->
