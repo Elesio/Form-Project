@@ -12,9 +12,11 @@
     
     <p id="first"><p id="fielddump" class="ffield"><input type="temptext" class="x1x1" onblur="con()" value="Vorname"><input type="temptext" class="x1x2" onblur="con()" value="Nachname"><input type="temptext" class="x1x3" onblur="con()" value="Mail-Addresse"><input type="temptext" class="x1x4" onblur="con()" value="Addresse"></p><p id = "secfielddump" class="secfield"><p id="field" class="field"></p><p id = "secfield" class="secfield"></p></p></p>
     <script>
+        let backupArray = []
         let rowcount = 1
         let columncount = 4
-        function addrow(){
+        function addrow(mode){
+            if(mode=='nor'){con()}
             rowcount++
             console.log('rowcount is '+rowcount)
             content = ''
@@ -30,26 +32,29 @@
             document.getElementById("secfield").innerHTML='<p id="field" class="field"></p><p id = "tempfield" class ="secfield"></p>'
             document.getElementById("secfield").id = "secfielddump"
             document.getElementById("tempfield").id = "secfield"
-            console.log
+            loadArray('nor')
         }
         function addcol(){
+            con()
             columncount++
-            content = ''
-            for(let i = 1;i<columncount+1;i++){
-                let unid = 'x' + rowcount + "x" + i
-                let inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
-                content = content + inp
-            }
-            console.log(content)
             curdoc = document.querySelectorAll(".ffield")
-            console.log(curdoc)
-            for(let i=0;i<curdoc.length;i++){
-                curdoc[i].innerHTML=content
+            for(let ii=1;ii<curdoc.length+1;ii++){
+                mancoun= 1
+                content = ''
+                for(let i = 1;i<columncount+1;i++){
+                    let unid = 'x' + ii + "x" + i
+                    let inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
+                    content = content + inp
+                } 
+                curdoc[ii-1].innerHTML=content
+                mancoun++
             }
+            loadArray('nor')
         }
         function delrow(){
+            con()
             console.log('rowcount is '+rowcount)
-            if(rowcount > 1){
+            if(rowcount > 2){
                 curdoc = document.querySelectorAll(".secfield")
                 if(curdoc.length > 2){
                     curcurdoc = curdoc[curdoc.length-2]
@@ -67,78 +72,45 @@
                 console.log(curdoc)
                 console.log(curcurdoc)
                 curcurdoc.innerHTML = ""
+                //curcurdoc.id="secfield"
                 curcurdocnew = curdoc[curdoc.length-3]
                 curcurdocnew.id = "secfield"
 
                 rowcount--
                 rowcount--
-                addrow()
+                addrow('mor')
             }
+            loadArray('row')
         }
         function delcol(){
+            con()
             if(columncount>1){
-            columncount--
-            content = ''
-            for(let i = 1;i<columncount+1;i++){
-                unid = 'x' + rowcount + "x" + i
-                inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
-                content = content + inp
+                columncount--
+                curdoc = document.querySelectorAll(".ffield")
+                for(let ii=1;ii<curdoc.length+1;ii++){
+                    content = ''
+                    for(let i = 1;i<columncount+1;i++){
+                        unid = 'x' + ii + "x" + i
+                        inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
+                        content = content + inp
+                    }
+                    console.log(content)
+                    console.log(curdoc)
+                    curdoc[ii-1].innerHTML=content
+                }
             }
-            console.log(content)
-            curdoc = document.querySelectorAll(".ffield")
-            console.log(curdoc)
-            for(let i=0;i<curdoc.length;i++){
-                curdoc[i].innerHTML=content
-            }}
-        }
-        function giveall(){
-            for(let i=0;i<document.querySelectorAll(".ffield").length;i++){
-                console.log(document.querySelectorAll(".ffield")[i])
-            }
-            console.log("This was ffield")
-            for(let i=0;i<document.querySelectorAll(".field").length;i++){
-                console.log(document.querySelectorAll(".field")[i])
-            }
-            console.log("This was field")
-            for(let i=0;i<document.querySelectorAll(".secfield").length;i++){
-                console.log(document.querySelectorAll(".secfield")[i])
-            }
-            console.log("This was secfield")
+            loadArray('col')
         }
     </script>
-    <button onclick="addrow()">Add Row</button>
+    <button onclick="addrow('nor')">Add Row</button>
     <button onclick="addcol()">Add Column</button>
     <button onclick="delrow()">Delete Row</button>
     <button onclick="delcol()">Delete Column</button>
-    <button onclick="giveall()">Gve all</button>
     <script>
         function deconstruct(id) {
             out = id.toString().charAt(1)
             console.log(id + " is id");
             return out
-        }
-        function createrealalldata() {
-            return ''
-            //This function creates a list[list[]] structure that has the column names as its first sublist
-        }
-        function send() {
-            let variable = createrealalldata();
-            var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/login";
-            var method = 'POST';
-
-            xhr.open(method, url);
-            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-            xhr.setRequestHeader('Content-Type', 'application/json')
-            //xhr.onload = function () {};
-
-            var data = new FormData();
-            data.append('user', 'person');
-            data.append('pwd', 'password');
-
-            let realdata = JSON.stringify(variable)
-
-            xhr.send(realdata);
         }
         function con(){
             dataArray = []
@@ -147,26 +119,97 @@
                 for(let ii=1;ii<columncount+1;ii++){
                     id = "x" + i + "x" + ii
                     currow = document.querySelectorAll("." + id)
-                    datarow.push(currow[0].value)
+                    if(currow[0].value!=""){
+                    datarow.push(currow[0].value)}
+                    else{
+                        datarow.push('')
+                    }
                 }
                 dataArray.push(datarow)
             }
-            console.log(dataArray)
-            //Send the data and replace send()
-            //Make a backup array that can be put back in after a column has been deleted
+
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/login";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+
+            let realdata = JSON.stringify(dataArray)
+
+            xhr.send(realdata);
+            backupArray = dataArray
+        }
+        function loadArray(mode){
+            if(mode=='nor'){
+                bua = backupArray
+                if(rowcount>=bua.length && columncount>=bua[0].length){
+                    console.log('Array fit')
+                    for(let i =1;i<bua.length+1;i++){
+                        for(let ii=1;ii<bua[0].length+1;ii++){
+                            loadid= 'x' + i + 'x' + ii
+                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                        }
+                    }
+                }
+                else{
+                    console.log(rowcount+' is rowcount')
+                    console.log(columncount+' is columncount')
+                    console.log(bua.length+' is bualength')
+                    console.log(bua[0].length+' is bua0length')
+                }
+                console.log('System loaded')
+            }
+            else if(mode=='row'){
+                bua = backupArray
+                if(rowcount>=bua.length-1 && columncount>=bua[0].length){
+                    console.log('Array fit')
+                    for(let i =1;i<bua.length;i++){
+                        for(let ii=1;ii<bua[0].length+1;ii++){
+                            loadid= 'x' + i + 'x' + ii
+                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                        }
+                    }
+                }
+                else{
+                    console.log(rowcount+' is rowcount')
+                    console.log(columncount+' is columncount')
+                    console.log(bua.length+' is bualength')
+                    console.log(bua[0].length+' is bua0length')
+                }
+                console.log('System attemtepted to load')
+            }
+            else if(mode=='col'){
+                bua = backupArray
+                if(rowcount>=bua.length && columncount>=bua[0].length-1){
+                    console.log('Array fit')
+                    for(let i =1;i<bua.length+1;i++){
+                        for(let ii=1;ii<bua[0].length;ii++){
+                            loadid= 'x' + i + 'x' + ii
+                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                        }
+                    }
+                }
+                else{
+                    console.log(rowcount+' is rowcount')
+                    console.log(columncount+' is columncount')
+                    console.log(bua.length+' is bualength')
+                    console.log(bua[0].length+' is bua0length')
+                }
+                console.log('System attemtepted to load')
+            }
         }
     </script>
 
     <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
 
     <p>Todo:</p>
-    <p>Fix Row / Column Min / Max (ar - dr - ar - dr)</p>
-    <p>Fix Row / Column deletion in lower counts</p>
-    <p>Reimplement export</p>
+    <p>Implement file loading into visual</p>
     <p>Implement login</p>
     <p>Implement database</p>
-    <p>Write Log File</p>
     <p>Do a write check at start</p>
+    <p>Remove useless linebreaks in early myfiles</p>
 
 </body>
 
