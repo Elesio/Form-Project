@@ -4,28 +4,36 @@ from flask_sqlalchemy import SQLAlchemy
 from flask import request
 from flask import jsonify
 from flask import send_file
-import shutil
-'''from flask_login import UserMixin
-import psycopg2'''
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/Noah/Downloads/Python/Flask/database.db'
+app.config['SECRET_KEY'] = '71EU8gnZqZQ'
 db = SQLAlchemy(app)
 
-class User(db.Model):
-    __tablename__='students'
+'''class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(20),nullable=False)
-    password = db.Column(db.String(80),nullable=False)
+    password = db.Column(db.String(80),nullable=False)'''
 
-    def __init__(self,username,password):
-        self.username=username
-        self.password=password
+with app.app_context():
+    db.create_all()
 
-@app.route("/conf")
+@app.route("/adduser")
+def adduser():
+    return render_template("adduser.html")
+
+@app.route("/conf",methods=['GET','POST'])
 def pagestart():
-    return render_template('index.html')
+    if request.method == 'POST':
+        return render_template('index.html')
+    else:
+        return 'Hast du doch eingeloggt?'
+    
+@app.route("/list",methods=['GET','POST'])
+def list():
+    return render_template('list.html')
 
 @app.route("/")
 def login():
@@ -78,7 +86,3 @@ def pyserv():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-@app.context_processor
-def example():
-    return dict(myexample='this is an example')
