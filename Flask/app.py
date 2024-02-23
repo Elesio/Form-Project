@@ -47,6 +47,10 @@ def loginnow():
 def givefile(filename):
     return send_file(filename)
 
+@app.route("/fileinp",methods=['POST'])
+def fileinp():
+    return 'Fick dich list.html du arsch'
+
 @app.route('/login',methods=['GET','POST'])
 def pyserv():
     name = 'Zin'

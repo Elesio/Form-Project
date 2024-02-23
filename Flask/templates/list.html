@@ -5,9 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        #dropfield{
+            position: absolute;
+            width:1920px;
+            height:1080px;
+        }
+    </style>
 </head>
 
 <body>
+    <div id="dropfield" ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)"></div>
     <h1>Please enter your data</h1>
     
     <p id="first"><p id="fielddump" class="ffield"><input type="temptext" class="x1x1" onblur="con()" value="Vorname"><input type="temptext" class="x1x2" onblur="con()" value="Nachname"><input type="temptext" class="x1x3" onblur="con()" value="Mail-Addresse"><input type="temptext" class="x1x4" onblur="con()" value="Addresse"></p><p id = "secfielddump" class="secfield"><p id="field" class="field"></p><p id = "secfield" class="secfield"></p></p></p>
@@ -101,11 +110,33 @@
             }
             loadArray('col')
         }
+        function dosmthfile(ev){
+            ev.preventDefault()
+            console.log('Wenn das als File erkannt wird kommt hier was raus: ' + ev)
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/fileinp";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.onload = function () {console.log(this.response)};
+
+            let realdata = JSON.stringify(ev)
+
+            xhr.send(realdata);
+        }
+        function dosmthdragover(ev){
+            ev.preventDefault()
+            console.log('dragging')
+        }
     </script>
     <button onclick="addrow('nor')">Add Row</button>
     <button onclick="addcol()">Add Column</button>
     <button onclick="delrow()">Delete Row</button>
     <button onclick="delcol()">Delete Column</button>
+    <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
+
     <script>
         function deconstruct(id) {
             out = id.toString().charAt(1)
@@ -202,10 +233,9 @@
         }
     </script>
 
-    <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
-
     <p>Todo:</p>
-    <p>Implement file loading into visual</p>
+    <p>Make the drop actually retrieve the file</p>
+    <p>Implement input file being turned into an Array and sent back through app.py</p>
     <p>Implement login</p>
     <p>Implement database</p>
     <p>Do a write check at start</p>
