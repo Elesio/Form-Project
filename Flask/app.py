@@ -8,14 +8,14 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////Users/Noah/Downloads/Python/Flask/database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databank.db'
 app.config['SECRET_KEY'] = '71EU8gnZqZQ'
 db = SQLAlchemy(app)
 
-'''class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(20),nullable=False)
-    password = db.Column(db.String(80),nullable=False)'''
+class Upload(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    filename = db.Column(db.String(50))
+    data = db.Column(db.LargeBinary)
 
 with app.app_context():
     db.create_all()
@@ -35,9 +35,24 @@ def pagestart():
 def list():
     return render_template('list.html')
 
+@app.route("/files",methods=['GET','POST'])
+def files():
+    if request.method == 'POST':
+        file = request.files['file']
+
+        upload = Upload(filename=file.filename, data=file.read())
+        db.session.add(upload)
+        db.session.commit()
+
+        return f'Uploaded: {file.filename}'
+
 @app.route("/")
 def login():
     return render_template('login.html')
+
+@app.route("/form")
+def form():
+    return render_template('new.html')
 
 @app.route("/py")
 def loginnow():
@@ -49,7 +64,24 @@ def givefile(filename):
 
 @app.route("/fileinp",methods=['POST'])
 def fileinp():
-    return 'Fick dich list.html du arsch'
+    usefile = app.root_path + '\myfile.txt'
+    with open(usefile, 'r') as fo:
+        content = fo.readlines()
+    #hier muss der File eingelesen werden
+        fulllist = []
+    for item in content:
+        newlist = item.split(',')
+        newnewlist = []
+        for entry in newlist:
+            new = entry.replace('\n','')
+            newnewlist.append(new)
+        newnewlist.append('endline')
+        fulllist.append(newnewlist)
+    thinglist = []
+    for thing in fulllist:
+        for thing2 in thing:
+            thinglist.append(thing2)
+    return thinglist
 
 @app.route('/login',methods=['GET','POST'])
 def pyserv():

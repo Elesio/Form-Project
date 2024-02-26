@@ -1,4 +1,12 @@
 Known issues with the programm:
+
+Problem:
 -When deleting row nr.2 the programm will bug out and refuse to delete any lines after this, even if new ones are created.
+Solution:
 -User Solution: Always have at least two rows present within the programm
 -Programm Solution: The Programm will no longer allow removing rows if you only have two
+
+Problem:
+-Programm behaves weird(e.g.: doesnt load code changes to the site)
+Solution:
+-Close and reopen the site

@@ -7,82 +7,91 @@
     <title>Document</title>
 
     <style>
-        #dropfield{
+        #dropfield {
+            margin: 0;
             position: absolute;
-            width:1920px;
-            height:1080px;
+            width: 19px;
+            height: 10px;
         }
     </style>
 </head>
 
 <body>
-    <div id="dropfield" ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)"></div>
     <h1>Please enter your data</h1>
-    
-    <p id="first"><p id="fielddump" class="ffield"><input type="temptext" class="x1x1" onblur="con()" value="Vorname"><input type="temptext" class="x1x2" onblur="con()" value="Nachname"><input type="temptext" class="x1x3" onblur="con()" value="Mail-Addresse"><input type="temptext" class="x1x4" onblur="con()" value="Addresse"></p><p id = "secfielddump" class="secfield"><p id="field" class="field"></p><p id = "secfield" class="secfield"></p></p></p>
+
+    <p id="first">
+    <p id="fielddump" class="ffield"><input type="temptext" class="x1x1" onblur="con()" value="Vorname"><input
+            type="temptext" class="x1x2" onblur="con()" value="Nachname"><input type="temptext" class="x1x3"
+            onblur="con()" value="Mail-Addresse"><input type="temptext" class="x1x4" onblur="con()" value="Addresse">
+    </p>
+    <p id="secfielddump" class="secfield">
+    <p id="field" class="field"></p>
+    <p id="secfield" class="secfield"></p>
+    </p>
+    </p>
     <script>
         let backupArray = []
         let rowcount = 1
         let columncount = 4
-        function addrow(mode){
-            if(mode=='nor'){con()}
+        function addrow(mode) {
+            if (mode == 'nor') { con() }
             rowcount++
-            console.log('rowcount is '+rowcount)
+            console.log('rowcount is ' + rowcount)
             content = ''
-            for(let i = 1;i<columncount+1;i++){
+            for (let i = 1; i < columncount + 1; i++) {
                 let unid = 'x' + rowcount + "x" + i
                 let inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
                 content = content + inp
             }
             console.log(content)
-            document.getElementById("field").innerHTML=content
+            document.getElementById("field").innerHTML = content
             document.getElementById("field").classList = "ffield"
             document.getElementById("field").id = "fielddump"
-            document.getElementById("secfield").innerHTML='<p id="field" class="field"></p><p id = "tempfield" class ="secfield"></p>'
+            document.getElementById("secfield").innerHTML = '<p id="field" class="field"></p><p id = "tempfield" class ="secfield"></p>'
             document.getElementById("secfield").id = "secfielddump"
             document.getElementById("tempfield").id = "secfield"
-            loadArray('nor')
+            if (mode != 'hal') { loadArray('nor') }
         }
-        function addcol(){
+        function addcol(mode) {
             con()
             columncount++
             curdoc = document.querySelectorAll(".ffield")
-            for(let ii=1;ii<curdoc.length+1;ii++){
-                mancoun= 1
+            for (let ii = 1; ii < curdoc.length + 1; ii++) {
+                mancoun = 1
                 content = ''
-                for(let i = 1;i<columncount+1;i++){
+                for (let i = 1; i < columncount + 1; i++) {
                     let unid = 'x' + ii + "x" + i
                     let inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
                     content = content + inp
-                } 
-                curdoc[ii-1].innerHTML=content
+                }
+                curdoc[ii - 1].innerHTML = content
                 mancoun++
             }
-            loadArray('nor')
+            if (mode != 'kthar') { loadArray('nor') }
         }
-        function delrow(){
+        function delrow() {
             con()
-            console.log('rowcount is '+rowcount)
-            if(rowcount > 2){
+            console.log('rowcount is ' + rowcount)
+            if (rowcount > 2) {
                 curdoc = document.querySelectorAll(".secfield")
-                if(curdoc.length > 2){
-                    curcurdoc = curdoc[curdoc.length-2]
+                if (curdoc.length > 2) {
+                    curcurdoc = curdoc[curdoc.length - 2]
                 }
-                else{
+                else {
                     curcurdoc = curdoc[0]
                 }
                 curdocval = document.querySelectorAll(".ffield")
-                curcurdocval = curdocval[curdocval.length-1]
-                console.log(curdocval +'is curdocval')
+                curcurdocval = curdocval[curdocval.length - 1]
+                console.log(curdocval + 'is curdocval')
                 curcurdocval.innerHTML = ""
-                curcurdocvalnew = curdocval[curdocval.length-2]
-                curcurdocvalnew.id="field"
+                curcurdocvalnew = curdocval[curdocval.length - 2]
+                curcurdocvalnew.id = "field"
 
                 console.log(curdoc)
                 console.log(curcurdoc)
                 curcurdoc.innerHTML = ""
                 //curcurdoc.id="secfield"
-                curcurdocnew = curdoc[curdoc.length-3]
+                curcurdocnew = curdoc[curdoc.length - 3]
                 curcurdocnew.id = "secfield"
 
                 rowcount--
@@ -91,28 +100,52 @@
             }
             loadArray('row')
         }
-        function delcol(){
+        function delcol() {
             con()
-            if(columncount>1){
+            if (columncount > 1) {
                 columncount--
                 curdoc = document.querySelectorAll(".ffield")
-                for(let ii=1;ii<curdoc.length+1;ii++){
+                for (let ii = 1; ii < curdoc.length + 1; ii++) {
                     content = ''
-                    for(let i = 1;i<columncount+1;i++){
+                    for (let i = 1; i < columncount + 1; i++) {
                         unid = 'x' + ii + "x" + i
                         inp = '<input type="temptext" class="' + unid + '" onblur="con()">'
                         content = content + inp
                     }
                     console.log(content)
                     console.log(curdoc)
-                    curdoc[ii-1].innerHTML=content
+                    curdoc[ii - 1].innerHTML = content
                 }
             }
             loadArray('col')
         }
-        function dosmthfile(ev){
+        function dosmthfile(ev) {
             ev.preventDefault()
-            console.log('Wenn das als File erkannt wird kommt hier was raus: ' + ev)
+            dt = ev.dataTransfer;
+            files = dt.files
+            mainfile = files[0]
+            console.log('Wenn das als File erkannt wird kommt hier was raus: ' + mainfile)
+            console.log(mainfile)
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/fileinp";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'FormData')
+            xhr.onload = function () { console.log(this.response) };
+
+            var formData = new FormData();
+            formData.append(mainfile, File)
+
+            xhr.send(formData);
+        }
+        function dosmthdragover(ev) {
+            ev.preventDefault()
+            console.log('dragging')
+        }
+        function usefile() {
+            usefilepath = 'C:/Users/Noah/Downloads/myfile.txt'
             var xhr = new XMLHttpRequest();
             var url = "http://127.0.0.1:5000/fileinp";
             var method = 'POST';
@@ -120,21 +153,81 @@
             xhr.open(method, url);
             xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
             xhr.setRequestHeader('Content-Type', 'application/json')
-            xhr.onload = function () {console.log(this.response)};
+            xhr.onload = function () { oncollide(this.response) };
 
-            let realdata = JSON.stringify(ev)
+            let realdata = JSON.stringify(usefilepath)
 
             xhr.send(realdata);
         }
-        function dosmthdragover(ev){
-            ev.preventDefault()
-            console.log('dragging')
+        function oncollide(response) {
+            //inprowcount = response.length
+            //inpcolumncount = response[0].length
+            console.log(typeof response)
+            console.log(response)
+            //Weil Python ja nicht will: Hier bei einem " die Annahme beginnen und bei einem weiteren " die Annahme beenden(für den ganzen File)
+            started = false
+            currentString = ''
+            fulllist = []
+            timelist = []
+            for (let i = 0; i < response.length; i++) {
+                if (response[i] == '"') {
+                    if (started == false) {
+                        started = true
+                    }
+                    else {
+                        if (currentString != 'endline') {
+                            timelist.push(currentString)
+                            currentString = ''
+                            started = false
+                        }
+                        else {
+                            fulllist.push(timelist)
+                            currentString = ''
+                            timelist = []
+                            started = false
+                        }
+                    }
+                }
+                else if (started == true) {
+                    currentString = currentString + response[i]
+                }
+            }
+            loadmyArray(fulllist)
+            con()
+            console.log(fulllist)
+        }
+        function loadmyArray(array) {
+            bua = array
+            if (rowcount >= bua.length && columncount >= bua[0].length) {
+                for (let i = 1; i < bua.length + 1; i++) {
+                    for (let ii = 1; ii < bua[0].length + 1; ii++) {
+                        loadid = 'x' + i + 'x' + ii
+                        document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
+                    }
+                }
+            }
+            else {
+                if (rowcount < bua.length) {
+                    for (let i = bua.length - rowcount; i > 0; i--) {
+                        addrow('hal')
+                        console.log('row expanded')
+                    }
+                }
+                if (columncount < bua[0].length) {
+                    for (let i = bua[0].length - columncount; i > 0; i--) {
+                        addcol('kthar')
+                        console.log('column expanded')
+                    }
+                }
+                loadmyArray(array)
+            }
         }
     </script>
     <button onclick="addrow('nor')">Add Row</button>
-    <button onclick="addcol()">Add Column</button>
+    <button onclick="addcol('nor')">Add Column</button>
     <button onclick="delrow()">Delete Row</button>
     <button onclick="delcol()">Delete Column</button>
+    <button onclick="usefile()">Input dummy file</button>
     <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
 
     <script>
@@ -143,16 +236,17 @@
             console.log(id + " is id");
             return out
         }
-        function con(){
+        function con() {
             dataArray = []
-            for(let i=1;i<rowcount+1;i++){
+            for (let i = 1; i < rowcount + 1; i++) {
                 datarow = []
-                for(let ii=1;ii<columncount+1;ii++){
+                for (let ii = 1; ii < columncount + 1; ii++) {
                     id = "x" + i + "x" + ii
                     currow = document.querySelectorAll("." + id)
-                    if(currow[0].value!=""){
-                    datarow.push(currow[0].value)}
-                    else{
+                    if (currow[0].value != "") {
+                        datarow.push(currow[0].value)
+                    }
+                    else {
                         datarow.push('')
                     }
                 }
@@ -172,74 +266,77 @@
             xhr.send(realdata);
             backupArray = dataArray
         }
-        function loadArray(mode){
-            if(mode=='nor'){
+        function loadArray(mode) {
+            if (mode == 'nor') {
                 bua = backupArray
-                if(rowcount>=bua.length && columncount>=bua[0].length){
+                if (rowcount >= bua.length && columncount >= bua[0].length) {
                     console.log('Array fit')
-                    for(let i =1;i<bua.length+1;i++){
-                        for(let ii=1;ii<bua[0].length+1;ii++){
-                            loadid= 'x' + i + 'x' + ii
-                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                    for (let i = 1; i < bua.length + 1; i++) {
+                        for (let ii = 1; ii < bua[0].length + 1; ii++) {
+                            loadid = 'x' + i + 'x' + ii
+                            document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
                         }
                     }
                 }
-                else{
-                    console.log(rowcount+' is rowcount')
-                    console.log(columncount+' is columncount')
-                    console.log(bua.length+' is bualength')
-                    console.log(bua[0].length+' is bua0length')
+                else {
+                    console.log(rowcount + ' is rowcount')
+                    console.log(columncount + ' is columncount')
+                    console.log(bua.length + ' is bualength')
+                    console.log(bua[0].length + ' is bua0length')
                 }
                 console.log('System loaded')
             }
-            else if(mode=='row'){
+            else if (mode == 'row') {
                 bua = backupArray
-                if(rowcount>=bua.length-1 && columncount>=bua[0].length){
+                if (rowcount >= bua.length - 1 && columncount >= bua[0].length) {
                     console.log('Array fit')
-                    for(let i =1;i<bua.length;i++){
-                        for(let ii=1;ii<bua[0].length+1;ii++){
-                            loadid= 'x' + i + 'x' + ii
-                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                    for (let i = 1; i < bua.length; i++) {
+                        for (let ii = 1; ii < bua[0].length + 1; ii++) {
+                            loadid = 'x' + i + 'x' + ii
+                            document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
                         }
                     }
                 }
-                else{
-                    console.log(rowcount+' is rowcount')
-                    console.log(columncount+' is columncount')
-                    console.log(bua.length+' is bualength')
-                    console.log(bua[0].length+' is bua0length')
+                else {
+                    console.log(rowcount + ' is rowcount')
+                    console.log(columncount + ' is columncount')
+                    console.log(bua.length + ' is bualength')
+                    console.log(bua[0].length + ' is bua0length')
                 }
                 console.log('System attemtepted to load')
             }
-            else if(mode=='col'){
+            else if (mode == 'col') {
                 bua = backupArray
-                if(rowcount>=bua.length && columncount>=bua[0].length-1){
+                if (rowcount >= bua.length && columncount >= bua[0].length - 1) {
                     console.log('Array fit')
-                    for(let i =1;i<bua.length+1;i++){
-                        for(let ii=1;ii<bua[0].length;ii++){
-                            loadid= 'x' + i + 'x' + ii
-                            document.querySelectorAll('.'+loadid)[0].value=bua[i-1][ii-1]
+                    for (let i = 1; i < bua.length + 1; i++) {
+                        for (let ii = 1; ii < bua[0].length; ii++) {
+                            loadid = 'x' + i + 'x' + ii
+                            document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
                         }
                     }
                 }
-                else{
-                    console.log(rowcount+' is rowcount')
-                    console.log(columncount+' is columncount')
-                    console.log(bua.length+' is bualength')
-                    console.log(bua[0].length+' is bua0length')
+                else {
+                    console.log(rowcount + ' is rowcount')
+                    console.log(columncount + ' is columncount')
+                    console.log(bua.length + ' is bualength')
+                    console.log(bua[0].length + ' is bua0length')
                 }
                 console.log('System attemtepted to load')
             }
         }
     </script>
 
+    <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
+
     <p>Todo:</p>
-    <p>Make the drop actually retrieve the file</p>
-    <p>Implement input file being turned into an Array and sent back through app.py</p>
+    <p>Fix input of special characters</p>
+    <p>Implement expansion of present array to loadarray</p>
     <p>Implement login</p>
     <p>Implement database</p>
     <p>Do a write check at start</p>
     <p>Remove useless linebreaks in early myfiles</p>
+    <p>Geschlecht herausfinden durch abgleichen mit Datenbank</p>
 
 </body>
 
