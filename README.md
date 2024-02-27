@@ -1,5 +1,7 @@
 Die momentane Benutzung des Programmes:
+
 -Warnung: Bisher ist dies unvollständig und wird sich zukünftig vermutlich ändern
+-Bei auftretenden Problemen die zuständige Person fragen(Ich weiß leider nicht wer das ist)
 
 1.: Python herunterladen:
 - Auf https://www.python.org/downloads/ Python herunterladen. Es wurde in der Entwicklung die Version 3.12.2 genutzt, sollte es in der Zukunft bei neueren Versionen Probleme geben könnte der Versionsunterschied Schuld sein
