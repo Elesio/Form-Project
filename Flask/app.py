@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-from flask_sqlalchemy import SQLAlchemy
+'''from flask_sqlalchemy import SQLAlchemy'''
 from flask import request
 from flask import jsonify
 from flask import send_file
@@ -9,44 +9,9 @@ import os
 from io import StringIO, BytesIO
 import psycopg2
 
-conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
-
-cur = conn.cursor()
-
-cur.execute("""CREATE TABLE IF NOT EXISTS users (
-    id INT PRIMARY KEY,
-    username VARCHAR(255),
-    password VARCHAR(255),
-    isadmin VARCHAR(255)
-);
-""")
-
-tid = 5
-tname = 'FabulousFox'
-tpass = 'xx_superduperpasswordextreme_xx'
-tadmin = 'maybe'
-
-cur.execute("""INSERT INTO users (id, username, password, isadmin) VALUES
-(1, 'Elesio', 'goodpassword', 'y'),
-(2, 'Nadoriana', 'vergoodpassword', 'y'),
-(3, 'Supefredi', 'passwordmanager', 'y'),
-(4, 'Antiunkraut', 'password', 'n');
-""")
-
-sql = cur.mogrify("""INSERT INTO users (id, username, password, isadmin) VALUES (%s, %s, %s, %s);""", (tid,tname,tpass,tadmin))
-cur.execute(sql)
-
-cur.execute("""SELECT * FROM users""")
-
-print(cur.fetchall())
-
-conn.commit()
-
-cur.close()
-conn.close()
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databank.db'
+
+'''app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databank.db'
 app.config['SECRET_KEY'] = '71EU8gnZqZQ'
 db = SQLAlchemy(app)
 
@@ -56,24 +21,94 @@ class Upload(db.Model):
     data = db.Column(db.LargeBinary)
 
 with app.app_context():
-    db.create_all()
+    db.create_all()'''
+
+@app.route("/getdata",methods=['POST'])
+def getdata():
+    conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
+
+    cur = conn.cursor()
+
+    cur.execute("""SELECT * FROM data""")
+
+    newresult = cur.fetchall()
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return newresult
+
+@app.route("/data",methods=['POST'])
+def data():
+    text = str(request.json)
+    #netext = text.replace('[','(')
+    #newtext = netext.replace(']',')')
+    #newtext = 'Hallo'
+    conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
+
+    cur = conn.cursor()
+
+    cur.execute("""DROP TABLE IF EXISTS users""")
+
+    cur.execute("""DROP TABLE IF EXISTS data""")
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS users (
+        id INT PRIMARY KEY,
+        username VARCHAR(255),
+        password VARCHAR(255),
+        isadmin VARCHAR(255)
+    );
+    """)
+
+    cur.execute("""CREATE TABLE IF NOT EXISTS data (
+        id INT PRIMARY KEY,
+        data VARCHAR(255555)
+    );
+    """)
+
+    sqlmod = cur.mogrify("""INSERT INTO data (id, data) VALUES (%s, %s);""", (1,text))
+    cur.execute(sqlmod)
+
+    tid = 5
+    tname = 'FabulousFox'
+    tpass = 'xx_superduperpasswordextreme_xx'
+    tadmin = 'maybe'
+
+    cur.execute("""INSERT INTO users (id, username, password, isadmin) VALUES
+    (1, 'Elesio', 'goodpassword', 'y'),
+    (2, 'Nadoriana', 'vergoodpassword', 'y'),
+    (3, 'Supefredi', 'passwordmanager', 'y'),
+    (4, 'Antiunkraut', 'password', 'n');
+    """)
+
+    sql = cur.mogrify("""INSERT INTO users (id, username, password, isadmin) VALUES (%s, %s, %s, %s);""", (tid,tname,tpass,tadmin))
+    cur.execute(sql)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    return 'Database data has been updated'
 
 @app.route("/adduser")
 def adduser():
     return render_template("adduser.html")
 
-@app.route("/conf",methods=['POST'])
+'''@app.route("/conf",methods=['POST'])
 def pagestart():
     if request.method == 'POST':
         return render_template('index.html')
     else:
         return 'Hast du doch eingeloggt?'
+'''
     
 @app.route("/list",methods=['GET','POST'])
 def list():
     return render_template('list.html')
 
-@app.route("/files",methods=['POST'])
+'''@app.route("/files",methods=['POST'])
 def files():
     if request.method == 'POST':
         file = request.files['file']
@@ -108,19 +143,19 @@ def download():
         fo.write("%s and end is " % end)
         fo.write(str(type(bytedata)))
     
-    return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)
+    return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)'''
 
 @app.route("/")
 def login():
     return render_template('login.html')
 
-@app.route("/form",methods=['POST'])
+'''@app.route("/form",methods=['POST'])
 def form():
     return render_template('new.html')
 
 @app.route("/py")
 def loginnow():
-    return render_template('form.html')
+    return render_template('form.html')'''
 
 @app.route("/<string:filename>")
 def givefile(filename):

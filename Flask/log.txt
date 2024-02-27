@@ -10,3 +10,8 @@ Problem:
 -Programm behaves weird(e.g.: doesnt load code changes to the site)
 Solution:
 -Close and reopen the site
+
+Problem:
+-No connection to the database can be established. This Problem has not yet occured but is likely possible to occur
+Solution:
+-Currently unknown: Checking the pgadmin4 program is recommended
