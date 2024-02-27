@@ -1,6 +1,7 @@
 Die momentane Benutzung des Programmes:
 
 -Warnung: Bisher ist dies unvollständig und wird sich zukünftig vermutlich ändern
+
 -Bei auftretenden Problemen die zuständige Person fragen(Ich weiß leider nicht wer das ist)
 
 1.: Python herunterladen:
