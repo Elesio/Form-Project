@@ -8,7 +8,7 @@ Die momentane Benutzung des Programmes:
 - Auf https://www.python.org/downloads/ Python herunterladen. Es wurde in der Entwicklung die Version 3.12.2 genutzt, sollte es in der Zukunft bei neueren Versionen Probleme geben könnte der Versionsunterschied Schuld sein
 
 2.: Installer ausführen:
-- Im Downloadsordner sollte sich nun die Datei "pythin-(Version, z.B. 3.12.2)-amd64.exe" befinden. Dies ist der Installer. Diesen ausführen und den im Installation Fenster angegebenen Schritten folgen
+- Im Downloadsordner sollte sich nun die Datei "python-(Version, z.B. 3.12.2)-amd64.exe" befinden. Dies ist der Installer. Diesen ausführen und den im Installation Fenster angegebenen Schritten folgen
 
 3.: Programm mit Python ausführen:
 - In die Programmdateien navigieren. Wurde der Ordner heruntergeladen und nicht bewegt so befindet sich die Datei in Downloads --> Flask
