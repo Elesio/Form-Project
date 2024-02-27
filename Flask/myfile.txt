@@ -1,5 +1,0 @@
-Vorname,Nachname,Mail-Addresse,Beschaeftigung,Wohnort
-Noah,Jubelius,Elesiomail,FwJ/Praktikum,Dortmund
-Zinedine,Ghoudan,Nadorianamail,Ausbildung,Dortmund
-Frederik,van Eickels,Weizenfredi,Studium,Juelich
-tobias,Foerster,Antiunkraut,Studium,Bayreuth

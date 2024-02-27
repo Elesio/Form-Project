@@ -222,6 +222,26 @@
                 loadmyArray(array)
             }
         }
+        function datafile() {
+            usefilepath = 'hentai'
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/d";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.onload = function () { oncoll(this.response) };
+
+            let realdata = JSON.stringify(usefilepath)
+
+            xhr.send(realdata);
+        }
+        function oncoll(file)
+        {
+            console.log(typeof file)
+            console.log(file)
+        }
     </script>
     <button onclick="addrow('nor')">Add Row</button>
     <button onclick="addcol('nor')">Add Column</button>
@@ -330,10 +350,9 @@
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
     <p>Todo:</p>
+    <p>Implement a database solution with PostGreSQL</p>
     <p>Fix input of special characters</p>
-    <p>Implement expansion of present array to loadarray</p>
     <p>Implement login</p>
-    <p>Implement database</p>
     <p>Do a write check at start</p>
     <p>Remove useless linebreaks in early myfiles</p>
     <p>Geschlecht herausfinden durch abgleichen mit Datenbank</p>
