@@ -6,7 +6,10 @@ from flask import jsonify
 from flask import send_file
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 import os
-from io import StringIO, BytesIO
+import json
+import requests
+from flask_oidc import OpenIDConnect
+'''from io import StringIO, BytesIO'''
 import psycopg2
 
 app = Flask(__name__)
@@ -50,17 +53,7 @@ def data():
 
     cur = conn.cursor()
 
-    cur.execute("""DROP TABLE IF EXISTS users""")
-
     cur.execute("""DROP TABLE IF EXISTS data""")
-
-    cur.execute("""CREATE TABLE IF NOT EXISTS users (
-        id INT PRIMARY KEY,
-        username VARCHAR(255),
-        password VARCHAR(255),
-        isadmin VARCHAR(255)
-    );
-    """)
 
     cur.execute("""CREATE TABLE IF NOT EXISTS data (
         id INT PRIMARY KEY,
@@ -71,30 +64,102 @@ def data():
     sqlmod = cur.mogrify("""INSERT INTO data (id, data) VALUES (%s, %s);""", (1,text))
     cur.execute(sqlmod)
 
-    tid = 5
-    tname = 'FabulousFox'
-    tpass = 'xx_superduperpasswordextreme_xx'
-    tadmin = 'maybe'
-
-    cur.execute("""INSERT INTO users (id, username, password, isadmin) VALUES
-    (1, 'Elesio', 'goodpassword', 'y'),
-    (2, 'Nadoriana', 'vergoodpassword', 'y'),
-    (3, 'Supefredi', 'passwordmanager', 'y'),
-    (4, 'Antiunkraut', 'password', 'n');
-    """)
-
-    sql = cur.mogrify("""INSERT INTO users (id, username, password, isadmin) VALUES (%s, %s, %s, %s);""", (tid,tname,tpass,tadmin))
-    cur.execute(sql)
-
     conn.commit()
 
     cur.close()
     conn.close()
     return 'Database data has been updated'
 
-@app.route("/adduser")
+'''@app.route("/getusers",methods=['POST'])
+def getusers():
+    conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
+
+    cur = conn.cursor()
+    
+    cur.execute("""SELECT * FROM users""")
+
+    result = cur.fetchall()
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return result'''
+
+@app.route("/getceruser",methods=['POST'])
+def getusers():
+    conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
+
+    cur = conn.cursor()
+    
+    sql = cur.mogrify("""SELECT * FROM users WHERE username = %s AND password = %s""",(request.json[0],request.json[1]))
+    cur.execute(sql)
+    #cur.execute("""SELECT * FROM users""")
+
+    result = cur.fetchall()
+
+    if result==[]:
+        return 'Username or password is wrong'
+    
+    res = result[0]
+
+    print(res)
+    print(request.json)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return str(res)
+
+@app.route("/adduser",methods=['GET','POST'])
 def adduser():
-    return render_template("adduser.html")
+    if request.method == 'GET':
+        return render_template("adduser.html")
+    else:
+        conn = psycopg2.connect(host="localhost", dbname="postgres", user="postgres", password="natlanmap39", port=5432)
+
+        cur = conn.cursor()
+
+        #cur.execute("""DROP TABLE IF EXISTS users""") #only for testing
+
+        cur.execute("""CREATE TABLE IF NOT EXISTS users (
+        id INT PRIMARY KEY,
+        username VARCHAR(255),
+        password VARCHAR(255),
+        isadmin VARCHAR(255)
+        );
+        """)
+
+        '''cur.execute("""INSERT INTO users (id, username, password, isadmin) VALUES
+        (1, 'Elesio', 'goodpassword', 'y'),
+        (2, 'Nadoriana', 'vergoodpassword', 'y'),
+        (3, 'Supefredi', 'passwordmanager', 'y'),
+        (4, 'Antiunkraut', 'password', 'n');
+        """)'''
+
+        tid = 5 #berechnen
+
+        tname = request.json[0]
+        tpass = request.json[1]
+
+        try:
+            cur.execute("""SELECT id FROM users ORDER BY id DESC LIMIT 1""")
+
+            tid = cur.fetchall()[0][0] + 1
+        except:
+            tid = 1
+
+        sql = cur.mogrify("""INSERT INTO users (id, username, password, isadmin) VALUES (%s, %s, %s, 'n');""", (tid,tname,tpass))
+        cur.execute(sql)
+
+        conn.commit()
+
+        cur.close()
+        conn.close()
+        return ''
 
 '''@app.route("/conf",methods=['POST'])
 def pagestart():
