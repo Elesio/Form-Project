@@ -11,8 +11,37 @@ import requests
 from flask_oidc import OpenIDConnect
 '''from io import StringIO, BytesIO'''
 import psycopg2
+from urllib.request import urlopen
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from authlib.jose.rfc7517.jwk import JsonWebKey
+from authlib.oauth2.rfc7523 import JWTBearerTokenValidator
 
 app = Flask(__name__)
+
+app.config.update({
+    'SECRET_KEY': '145dc9aa857b831ff2eff221b79d179a',
+    'TESTING': True,
+    'DEBUG': True,
+    'OIDC_CLIENT_SECRETS': 'client_secrets.json',
+    'OIDC_ID_TOKEN_COOKIE_SECURE': False,
+    'OIDC_USER_INFO_ENABLED': True,
+    'OIDC_OPENID_REALM': 'flask-demo',
+    'OIDC_SCOPES': ['openid', 'email', 'profile'],
+    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
+})
+
+#https://gist.github.com/thomasdarimont/145dc9aa857b831ff2eff221b79d179a
+
+oidc = OpenIDConnect(app)
+
+@app.route("/logtest")
+def logtest():
+    if oidc.user_loggedin:
+        return ('Hello, %s, <a href="/private">See private</a> '
+                '<a href="/logout">Log out</a>') % \
+            oidc.user_getfield('preferred_username')
+    else:
+        return 'Welcome anonymous, <a href="/private">Log in</a>'
 
 '''app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databank.db'
 app.config['SECRET_KEY'] = '71EU8gnZqZQ'
