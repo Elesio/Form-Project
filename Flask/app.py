@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-'''from flask_sqlalchemy import SQLAlchemy'''
+import logging
 from flask import request
 from flask import jsonify
 from flask import send_file
@@ -9,17 +9,15 @@ import os
 import json
 import requests
 from flask_oidc import OpenIDConnect
-'''from io import StringIO, BytesIO'''
 import psycopg2
-from urllib.request import urlopen
-from authlib.integrations.flask_oauth2 import ResourceProtector
-from authlib.jose.rfc7517.jwk import JsonWebKey
-from authlib.oauth2.rfc7523 import JWTBearerTokenValidator
+from flask import session
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
 app.config.update({
-    'SECRET_KEY': '145dc9aa857b831ff2eff221b79d179a',
+    'SECRET_KEY': 'SI5Yk0YbLbscfsxBijYEM4VyLylQozB3',
     'TESTING': True,
     'DEBUG': True,
     'OIDC_CLIENT_SECRETS': 'client_secrets.json',
@@ -27,7 +25,8 @@ app.config.update({
     'OIDC_USER_INFO_ENABLED': True,
     'OIDC_OPENID_REALM': 'flask-demo',
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
-    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
+    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
+    'OIDC_TOKEN_TYPE_HINT': 'access_token'
 })
 
 #https://gist.github.com/thomasdarimont/145dc9aa857b831ff2eff221b79d179a
@@ -41,8 +40,8 @@ def logtest():
                 '<a href="/logout">Log out</a>') % \
             oidc.user_getfield('preferred_username')
     else:
-        return 'Welcome anonymous, <a href="/private">Log in</a>'
-
+        return str(oidc.user_loggedin)
+    
 '''app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///databank.db'
 app.config['SECRET_KEY'] = '71EU8gnZqZQ'
 db = SQLAlchemy(app)
