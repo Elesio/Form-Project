@@ -14,19 +14,17 @@ from flask_oidc import OpenIDConnect
 import psycopg2
 from flask import session
 
-logging.basicConfig(level=logging.DEBUG)
-
 app = Flask(__name__)
 
 app.config.update({
     'SECRET_KEY': 'SI5Yk0YbLbscfsxBijYEM4VyLylQozB3',
-    #'TESTING': True,
-    #'DEBUG': True,
+    'TESTING': True,
+    'DEBUG': True,
     'OIDC_CLIENT_SECRETS': 'client_secrets.json',
-    #'OIDC_ID_TOKEN_COOKIE_SECURE': False,
-    #'OIDC_USER_INFO_ENABLED': True,
+    'OIDC_COOKIE_SECURE': False,
+    'OIDC_USER_INFO_ENABLED': True,
     #'OIDC_OPENID_REALM': 'flask-demo',
-    #'OIDC_SCOPES': ['openid', 'email', 'profile'],
+    'OIDC_SCOPES': ['openid', 'email', 'profile']
     #'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
     #'OIDC_TOKEN_TYPE_HINT': 'access_token'
 })
@@ -38,6 +36,12 @@ oidc = OpenIDConnect(app)
 @app.route('/loging')
 def loging():
     return redirect(url_for('oidc_auth.login'))
+
+@app.route('/test')
+@oidc.require_login
+def sitetest():
+    return 'Hallo'
+
 
 @app.route('/')
 def start():

@@ -5,15 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <style>
-        #dropfield {
-            margin: 0;
-            position: absolute;
-            width: 19px;
-            height: 10px;
-        }
-    </style>
 </head>
 
 <body onload="dostart()">
@@ -59,7 +50,21 @@
                 if (mode != 'hal') { loadArray('nor') }
             }
             else if (addrowmode == 'fir') {
-                console.log('fir-interactions have not yet been implemented for this action')
+                con()
+                addrowmode = 'last'
+                addrow('nor')
+                addrowmode = 'fir'
+                content = []
+                for (let i = 1; i < columncount + 1; i++) {
+                    inp = ""
+                    content.push(inp)
+                }
+                bua = backupArray
+                bua.splice(1,0,content)
+                backupArray = bua
+                console.log(bua)
+                console.log(backupArray)
+                loadArray('nor')
             }
             else if (addrowmode == 'cus') {
                 console.log('cus-interactions have not yet been implemented for this action')
@@ -91,7 +96,7 @@
                 console.log('cus-interactions have not yet been implemented for this action')
             }
         }
-        function delrow() {
+        function delrow(mode) {
             if (delrowmode == 'last') {
                 con()
                 console.log('rowcount is ' + rowcount)
@@ -119,13 +124,25 @@
 
                     rowcount--
                     rowcount--
+                    addrowmode = 'last'
                     addrow('mor')
+                    addrowmode = 'fir'
                 }
                 loadArray('row')
-                con()
+                if(mode=='nonnor'){con()}
             }
             else if (delrowmode == 'fir') {
                 console.log('fir-interactions have not yet been implemented for this action')
+                con()
+                delrowmode = 'last'
+                delrow('nor')
+                delrowmode = 'fir'
+                bua = backupArray
+                console.log(bua + ' before')
+                bua.splice(1,1)
+                backupArray = bua
+                console.log(bua)
+                loadArray('nor')
             }
             else if (delrowmode == 'cus') {
                 console.log('cus-interactions have not yet been implemented for this action')
@@ -518,7 +535,7 @@
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
     <p>Todo:</p>
-    <p>Implement fir- and cus-interactions(fir: Save Array -> Remove line 2 -> Load Array and remove empty line)(cus: Prompt? Visual with buttons?)
+    <p>Implement fir- and cus-interactions(fir: add- & delrow)(cus: Prompt? Visual with buttons?)
     </p>
     <p>Implement login with keycloak / Flask oidc</p>
     <p>Fix input of special characters(Replace unistring with original through js after return? Replace with ae etc. in
