@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import render_template
 import logging
+from flask import url_for
+from flask import redirect
 from flask import request
 from flask import jsonify
 from flask import send_file
@@ -18,20 +20,39 @@ app = Flask(__name__)
 
 app.config.update({
     'SECRET_KEY': 'SI5Yk0YbLbscfsxBijYEM4VyLylQozB3',
-    'TESTING': True,
-    'DEBUG': True,
+    #'TESTING': True,
+    #'DEBUG': True,
     'OIDC_CLIENT_SECRETS': 'client_secrets.json',
-    'OIDC_ID_TOKEN_COOKIE_SECURE': False,
-    'OIDC_USER_INFO_ENABLED': True,
-    'OIDC_OPENID_REALM': 'flask-demo',
-    'OIDC_SCOPES': ['openid', 'email', 'profile'],
-    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
-    'OIDC_TOKEN_TYPE_HINT': 'access_token'
+    #'OIDC_ID_TOKEN_COOKIE_SECURE': False,
+    #'OIDC_USER_INFO_ENABLED': True,
+    #'OIDC_OPENID_REALM': 'flask-demo',
+    #'OIDC_SCOPES': ['openid', 'email', 'profile'],
+    #'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
+    #'OIDC_TOKEN_TYPE_HINT': 'access_token'
 })
 
 #https://gist.github.com/thomasdarimont/145dc9aa857b831ff2eff221b79d179a
 
 oidc = OpenIDConnect(app)
+
+@app.route('/loging')
+def loging():
+    return redirect(url_for('oidc_auth.login'))
+
+@app.route('/')
+def start():
+    if(oidc.user_loggedin==True):
+        return render_template("login.html")
+    else:
+        nice = 'You are not logged in! ' + str(oidc.user_loggedin)
+        return nice
+        #return redirect(url_for('oidc_auth.login'))
+    #return 'hallo'
+
+@app.route('/logout')
+def logout():
+    oidc.logout()
+    return 'You have been logged out'
 
 @app.route("/logtest")
 def logtest():
@@ -238,9 +259,9 @@ def download():
     
     return send_file(BytesIO(upload.data), download_name=upload.filename, as_attachment=True)'''
 
-@app.route("/")
+'''@app.route("/")
 def login():
-    return render_template('login.html')
+    return render_template('login.html')'''
 
 '''@app.route("/form",methods=['POST'])
 def form():
