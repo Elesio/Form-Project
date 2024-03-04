@@ -5,6 +5,7 @@ from flask import url_for
 from flask import redirect
 from flask import request
 from flask import jsonify
+from flask import make_response
 from flask import send_file
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 import os
@@ -24,7 +25,7 @@ app.config.update({
     'OIDC_COOKIE_SECURE': False,
     'OIDC_USER_INFO_ENABLED': True,
     #'OIDC_OPENID_REALM': 'flask-demo',
-    'OIDC_SCOPES': ['openid', 'email', 'profile']
+    #'OIDC_SCOPES': ['openid', 'email', 'profile']
     #'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post',
     #'OIDC_TOKEN_TYPE_HINT': 'access_token'
 })
@@ -34,6 +35,11 @@ oidc = OpenIDConnect(app)
 @app.route('/loging')
 def loging():
     return redirect(url_for('oidc_auth.login'))
+
+@app.route('/profile')
+@oidc.require_login
+def role():
+    return str(oidc.user_getinfo('info'))
 
 '''@app.route('/test')
 @oidc.require_login
@@ -45,7 +51,8 @@ def start():
     if(oidc.user_loggedin==True):
         return render_template("login.html")
     else:
-        nice = 'You are not logged in!\n<button><a href="http://127.0.0.1:5000/loging">Login</a></button>'
+        nice = 'You are not logged in! <button><a href="http://127.0.0.1:5000/loging">Login</a></button>'
+        just = False
         return nice
         #return redirect(url_for('oidc_auth.login'))
     #return 'hallo'
@@ -221,7 +228,11 @@ def pagestart():
 @app.route("/list",methods=['GET','POST'])
 @oidc.require_login
 def list():
-    return render_template('list.html')
+    ver = oidc.user_getfield('email_verified')
+    if ver == True:
+        return render_template('list.html')
+    else:
+        return 'You are not authorized to view this content. Ask the responsible admin for access on this account\n<button><a href="http://127.0.0.1:5000/loging">Logout</a></button>'
 
 '''@app.route("/files",methods=['POST'])
 def files():

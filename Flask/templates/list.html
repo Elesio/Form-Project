@@ -60,7 +60,7 @@
                     content.push(inp)
                 }
                 bua = backupArray
-                bua.splice(1,0,content)
+                bua.splice(1, 0, content)
                 backupArray = bua
                 loadArray('nor')
             }
@@ -85,7 +85,7 @@
                     mancoun++
                 }
                 if (mode != 'kthar') { loadArray('nor') }
-                if (mode!='nonnor'){con()}
+                if (mode != 'nonnor') { con() }
             }
             else if (addcolumnmode == 'fir') {
                 con()
@@ -94,7 +94,7 @@
                 addcol('nonnor')
                 addcolumnmode = 'fir'
                 for (let i = 0; i < bua.length; i++) {
-                    bua[i].splice(1,0,"")
+                    bua[i].splice(1, 0, "")
                 }
                 backupArray = bua
                 loadArray('nor')
@@ -136,7 +136,7 @@
                     addrowmode = 'fir'
                 }
                 loadArray('row')
-                if(mode!='nonnor'){con()}
+                if (mode != 'nonnor') { con() }
             }
             else if (delrowmode == 'fir') {
                 con()
@@ -144,7 +144,7 @@
                 delrow('nonnor')
                 delrowmode = 'fir'
                 bua = backupArray
-                bua.splice(1,1)
+                bua.splice(1, 1)
                 backupArray = bua
                 loadArray('nor')
             }
@@ -171,7 +171,7 @@
                     }
                 }
                 loadArray('col')
-                if(mode!="nonnor"){con()}
+                if (mode != "nonnor") { con() }
             }
             else if (delcolumnmode == 'fir') {
                 console.log('fir-interactions have not yet been implemented for this action')
@@ -183,7 +183,7 @@
                 delcol('nonnor')
                 delcolumnmode = 'fir'
                 for (let i = 0; i < bua.length; i++) {
-                    bua[i].splice(1,1)
+                    bua[i].splice(1, 1)
                 }
                 backupArray = bua
                 loadArray('nor')
@@ -322,8 +322,12 @@
                 for (let ii = 1; ii < columncount + 1; ii++) {
                     id = "x" + i + "x" + ii
                     currow = document.querySelectorAll("." + id)
-                    if (currow[0].value != "") {
-                        datarow.push(currow[0].value)
+                    curval = currow[0].value
+                    if (curval != "") {
+                        curval = curval.replace('ä', 'ae')
+                        curval = curval.replace('ö', 'oe')
+                        curval = curval.replace('ü', 'ue')
+                        datarow.push(curval)
                     }
                     else {
                         datarow.push('')
@@ -379,6 +383,7 @@
                     wstar = true
                 }
                 else if (resp[i] == "'" && wstar == true) {
+                    //curword = curword.replace('\u00e4','ä')
                     currow.push(curword)
                     curword = ""
                     wstar = false
@@ -459,8 +464,12 @@
                 for (let ii = 1; ii < columncount + 1; ii++) {
                     id = "x" + i + "x" + ii
                     currow = document.querySelectorAll("." + id)
-                    if (currow[0].value != "") {
-                        datarow.push(currow[0].value)
+                    curval = currow[0].value
+                    if (curval != "") {
+                        curval = curval.replace('ä', 'ae')
+                        curval = curval.replace('ö', 'oe')
+                        curval = curval.replace('ü', 'ue')
+                        datarow.push(curval)
                     }
                     else {
                         datarow.push('')
@@ -551,17 +560,13 @@
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
     <p>Todo:</p>
-    <p>Implement cus-interactions(Prompt? Visual with buttons?)
-    </p>
-    <p>Implement Keycloak authorization</p>
-    <p>Implement adding admin users</p>
-    <p>Fix input of special characters(Replace unistring with original through js after return? Replace with ae etc. in
-        js before sending?)</p>
+    <p>Implement cus-interactions(Prompt? Visual with buttons?)</p>
+    <p>Find better solution for special character: Replace unistring instead of simplifying</p>
     <p>Do a write check at start</p>
-    <p>In die Readme schrieben das man sich Libraries ziehen muss oder das Programm in ein Virtual Env packen</p>
+    <p>Programm in ein Virtual Env packen?</p>
     <p>Implement analysis of dropped element -> Load</p>
     <p>Automatically select gender based on namedata from a database?</p>
-
+    <p>Use Checkmk</p>
 </body>
 
 </html>
