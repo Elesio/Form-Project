@@ -197,21 +197,16 @@
             dt = ev.dataTransfer;
             files = dt.files
             mainfile = files[0]
-            console.log('Wenn das als File erkannt wird kommt hier was raus: ' + mainfile)
-            console.log(mainfile)
-            var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/fileinp";
-            var method = 'POST';
 
-            xhr.open(method, url);
-            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
-            xhr.setRequestHeader('Content-Type', 'FormData')
-            xhr.onload = function () { console.log(this.response) };
+            let fr = new FileReader();
+            fr.readAsText(mainfile);
+            fr.addEventListener('load', () => {
+                resu = fr.result;
+                console.log(resu);
 
-            var formData = new FormData();
-            formData.append(mainfile, File)
-
-            xhr.send(formData);
+                //Einfach hier einlesen
+                //Resu ist ein String
+            })
         }
         function dosmthdragover(ev) {
             ev.preventDefault()

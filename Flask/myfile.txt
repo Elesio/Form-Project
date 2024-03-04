@@ -5,3 +5,10 @@ Fabian,Fuchs,FabulousFox,Ausbildung
 Frederik,van Eickels,Superfredi,Studium
 Tobias,Foerster,Antiunkraut,Studium
 Ricardo,Rehborg,Mortis,Duales Studium
+Vorname,Nachname,Name,Beschaeftigung
+Noah,Jubelius,Elesio,FwJ / Praktikum
+Zinedine,Ghoudan,Nadoriana,Ausbildung
+Fabian,Fuchs,FabulousFox,Ausbildung
+Frederik,van Eickels,Superfredi,Studium
+Tobias,Foerster,Antiunkraut,Studium
+Ricardo,Rehborg,Mortis,Duales Studium
