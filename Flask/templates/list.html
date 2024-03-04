@@ -62,8 +62,6 @@
                 bua = backupArray
                 bua.splice(1,0,content)
                 backupArray = bua
-                console.log(bua)
-                console.log(backupArray)
                 loadArray('nor')
             }
             else if (addrowmode == 'cus') {
@@ -87,10 +85,19 @@
                     mancoun++
                 }
                 if (mode != 'kthar') { loadArray('nor') }
-                con()
+                if (mode!='nonnor'){con()}
             }
             else if (addcolumnmode == 'fir') {
-                console.log('fir-interactions have not yet been implemented for this action')
+                con()
+                bua = backupArray
+                addcolumnmode = 'last'
+                addcol('nonnor')
+                addcolumnmode = 'fir'
+                for (let i = 0; i < bua.length; i++) {
+                    bua[i].splice(1,0,"")
+                }
+                backupArray = bua
+                loadArray('nor')
             }
             else if (addcolumnmode == 'cus') {
                 console.log('cus-interactions have not yet been implemented for this action')
@@ -129,26 +136,23 @@
                     addrowmode = 'fir'
                 }
                 loadArray('row')
-                if(mode=='nonnor'){con()}
+                if(mode!='nonnor'){con()}
             }
             else if (delrowmode == 'fir') {
-                console.log('fir-interactions have not yet been implemented for this action')
                 con()
                 delrowmode = 'last'
-                delrow('nor')
+                delrow('nonnor')
                 delrowmode = 'fir'
                 bua = backupArray
-                console.log(bua + ' before')
                 bua.splice(1,1)
                 backupArray = bua
-                console.log(bua)
                 loadArray('nor')
             }
             else if (delrowmode == 'cus') {
                 console.log('cus-interactions have not yet been implemented for this action')
             }
         }
-        function delcol() {
+        function delcol(mode) {
             if (delcolumnmode == 'last') {
                 con()
                 if (columncount > 1) {
@@ -167,10 +171,22 @@
                     }
                 }
                 loadArray('col')
-                con()
+                if(mode!="nonnor"){con()}
             }
             else if (delcolumnmode == 'fir') {
                 console.log('fir-interactions have not yet been implemented for this action')
+                console.log('con() for backup --> do normal column removal --> remove column at index 1 from bua --> load bua')
+
+                con()
+                bua = backupArray
+                delcolumnmode = 'last'
+                delcol('nonnor')
+                delcolumnmode = 'fir'
+                for (let i = 0; i < bua.length; i++) {
+                    bua[i].splice(1,1)
+                }
+                backupArray = bua
+                loadArray('nor')
             }
             else if (delcolumnmode == 'cus') {
                 console.log('cus-interactions have not yet been implemented for this action')
@@ -427,7 +443,7 @@
     <button onclick="delcol()">Delete Column</button>
     <button onclick="datasend()">Send to Database</button>
     <button onclick="contsettings()">Settings</button>
-    <button><a href="http://127.0.0.1:5000/logout">Log out(Add link to href)</a></button>
+    <button><a href="http://127.0.0.1:5000/logout">Log out</a></button>
     <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
 
     <script>
@@ -535,16 +551,15 @@
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
     <p>Todo:</p>
-    <p>Implement fir- and cus-interactions(fir: add- & delrow)(cus: Prompt? Visual with buttons?)
+    <p>Implement cus-interactions(Prompt? Visual with buttons?)
     </p>
-    <p>Implement login with keycloak / Flask oidc</p>
+    <p>Implement Keycloak authorization</p>
+    <p>Implement adding admin users</p>
     <p>Fix input of special characters(Replace unistring with original through js after return? Replace with ae etc. in
         js before sending?)</p>
     <p>Do a write check at start</p>
     <p>In die Readme schrieben das man sich Libraries ziehen muss oder das Programm in ein Virtual Env packen</p>
-    <p>Remove useless linebreaks in early myfiles and linebreaks when elements are left empty in the middle(Save empty
-        spaces as "---" and replace when loaded?)</p>
-    <p>Implement dragging element in to update?</p>
+    <p>Implement analysis of dropped element -> Load</p>
     <p>Automatically select gender based on namedata from a database?</p>
 
 </body>
@@ -564,14 +579,14 @@ https://www.youtube.com/watch?v=EGqWS7HCboA
 https://www.youtube.com/watch?v=Cdx73SndLYc
 https://www.youtube.com/watch?v=J-_KnNpZoE0
 
-https://youtu.be/Ghf8XEB0Z4c?si=l52eptmwG-53_AbB
-
 g7mhnZfbbOk
 
 Docker Container läuft -> Auf 127.0.0.1:8080/realms/ProgrammRealm/account gehen
 Account erstellen
 
 erd@lg-do.de
+
+elesio password: 12345687
 
 docker run --name keycloak -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=g00dadminpassword quay.io/keycloak/keycloak:latest start-dev
 -->

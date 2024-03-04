@@ -29,26 +29,23 @@ app.config.update({
     #'OIDC_TOKEN_TYPE_HINT': 'access_token'
 })
 
-#https://gist.github.com/thomasdarimont/145dc9aa857b831ff2eff221b79d179a
-
 oidc = OpenIDConnect(app)
 
 @app.route('/loging')
 def loging():
     return redirect(url_for('oidc_auth.login'))
 
-@app.route('/test')
+'''@app.route('/test')
 @oidc.require_login
 def sitetest():
-    return 'Hallo'
-
+    return 'Hallo' '''
 
 @app.route('/')
 def start():
     if(oidc.user_loggedin==True):
         return render_template("login.html")
     else:
-        nice = 'You are not logged in! ' + str(oidc.user_loggedin)
+        nice = 'You are not logged in!\n<button><a href="http://127.0.0.1:5000/loging">Login</a></button>'
         return nice
         #return redirect(url_for('oidc_auth.login'))
     #return 'hallo'
@@ -61,9 +58,7 @@ def logout():
 @app.route("/logtest")
 def logtest():
     if oidc.user_loggedin:
-        return ('Hello, %s, <a href="/private">See private</a> '
-                '<a href="/logout">Log out</a>') % \
-            oidc.user_getfield('preferred_username')
+        return ('<a href="/logout">Log out</a>')
     else:
         return str(oidc.user_loggedin)
     
@@ -168,6 +163,7 @@ def getusers():
     return str(res)
 
 @app.route("/adduser",methods=['GET','POST'])
+@oidc.require_login
 def adduser():
     if request.method == 'GET':
         return render_template("adduser.html")
@@ -223,6 +219,7 @@ def pagestart():
 '''
     
 @app.route("/list",methods=['GET','POST'])
+@oidc.require_login
 def list():
     return render_template('list.html')
 
@@ -276,6 +273,7 @@ def loginnow():
     return render_template('form.html')'''
 
 @app.route("/<string:filename>")
+@oidc.require_login
 def givefile(filename):
     return send_file(filename)
 
@@ -323,18 +321,21 @@ def pyserv():
                         newlist.append(thing)
                 newsave.append(newlist)
             for i in range(len(newsave)):
+                nonefurther = True
                 for ii in range(len(newsave[0])):
                     if ii != len(newsave[0])-1 and newsave[i][ii+1]!='':
                         fo.write("%s," % newsave[i][ii])
-                    elif ii == len(newsave[0])-1 or newsave[i][ii+1]=='':
+                    elif ii == len(newsave[0])-1:
                         fo.write("%s" % newsave[i][ii])
                         fo.write('\n')
+                    elif newsave[i][ii+1]=='':
+                        fo.write("%s," % newsave[i][ii])
             fo.close()
         #return request.json
             return filepath
     else:
         print('get')
-        name = 'Noah'
+        name = 'Anonymous'
         return 'Tschüss ' + name + '!'
 
 if __name__ == "__main__":

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Please enter your data</h1>
+    <table id="contenttable">
+        <caption></caption>
+        <tr>
+            <th id="headfirst">First Name</th>
+            <th id="headsecond">Last Name</th>
+            <th id="headthird">Mail</th>
+            <th id="headfourth">Address</th>
+        </tr>
+        <tr>
+            <script>let currow = 0;
+            </script>
+            <td><button onclick="enterfirstname(mainid1)" id='testclass1'>Enter your first name</button></td>
+            <td><button onclick="enterlastname(mainid2)" id='testclass2'>Enter your last name</button></td>
+            <td><button onclick="entermail(mainid3)" id='testclass3'>Enter your mail</button></td>
+            <td><button onclick="enteraddress(mainid4)" id='testclass4'>Enter your address</button></td>
+            <script>
+                let mainid1 = "x" + currow + "1";
+                let mainid2 = "x" + currow + "2";
+                let mainid3 = "x" + currow + "3";
+                let mainid4 = "x" + currow + "4";
+                document.getElementById("testclass1").classList = mainid1;
+                document.getElementById("testclass2").classList = mainid2;
+                document.getElementById("testclass3").classList = mainid3;
+                document.getElementById("testclass4").classList = mainid4;
+                document.getElementById("testclass1").id = "dump";
+                document.getElementById("testclass2").id = "dump";
+                document.getElementById("testclass3").id = "dump";
+                document.getElementById("testclass4").id = "dump";
+            </script>
+        </tr>
+    </table>
+    <script>
+        let curTableInp = 2;
+        let firstname = [""];
+        let lastname = [""];
+        let mail = [""];
+        let address = [""];
+        let alldata = [firstname, lastname, mail, address];
+        let output = "Please enter all your data before exporting";
+        function enterfirstname(main) {
+            const inputname = prompt("What is your first name?");
+            currow = deconstruct(main);
+            alldata[0][currow] = inputname;
+            mainid1 = "x" + currow + "1";
+            console.log(currow + " is currow");
+            console.log(alldata[0] + " is alldata[0]");
+            console.log(mainid1 + " is mainid1");
+            curdoc = document.querySelectorAll("." + mainid1);
+            console.log(curdoc);
+            curdoc[0].innerText = alldata[0][currow];
+            document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
+            send();
+        }
+        function enterlastname(main) {
+            const inputname = prompt("What is your last name?");
+            currow = deconstruct(main);
+            alldata[1][currow] = inputname;
+            mainid2 = "x" + currow + "2";
+            curdoc = document.querySelectorAll("." + mainid2);
+            console.log(curdoc[0]);
+            curdoc[0].innerText = alldata[1][currow];
+            document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
+            send();
+        }
+        function entermail(main) {
+            const inputname = prompt("What is your E-mail Address?");
+            currow = deconstruct(main);
+            alldata[2][currow] = inputname;
+            mainid3 = "x" + currow + "3";
+            curdoc = document.querySelectorAll("." + mainid3);
+            console.log(curdoc[0]);
+            curdoc[0].innerText = alldata[2][currow];
+            document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
+            send();
+        }
+        function enteraddress(main) {
+            const inputname = prompt("What is your Address?");
+            currow = deconstruct(main);
+            alldata[3][currow] = inputname;
+            mainid4 = "x" + currow + "4";
+            curdoc = document.querySelectorAll("." + mainid4);
+            console.log(curdoc[0]);
+            curdoc[0].innerText = alldata[3][currow];
+            document.getElementById("outputid").innerHTML = getmissing();
+            console.log(main);
+            send();
+        }
+        function isClear(userdata, number) {
+            output = 0;
+            for (let i = number - 1; i > 0; i--) {
+                if (userdata[i - 1] == "" || userdata[i - 1] == undefined) {
+                    output++;
+                }
+            }
+            return output;
+        }
+        function getmissing() {
+            let userdata = [alldata[0][currow], alldata[1][currow], alldata[2][currow], alldata[3][currow]];
+            console.log(userdata);
+            let output = "Please enter ";
+            let count = 0;
+            for (let i = 0; i < 4; i++) {
+                if (userdata[i] == "" || userdata[i] == undefined) {
+                    count++;
+                }
+            }
+            console.log(count);
+            let cur = 1;
+            if (userdata[0] == "" || userdata[0] == undefined) {
+                output = output + "first name ";
+                cur++;
+            }
+            if (userdata[1] == "" || userdata[1] == undefined) {
+                if (cur == count && isClear(userdata, 2) > 0) {
+                    output = output + "and ";
+                }
+                output = output + "last name ";
+                cur++;
+            }
+            if (userdata[2] == "" || userdata[2] == undefined) {
+                if (cur == count && isClear(userdata, 3) > 0) {
+                    output = output + "and ";
+                }
+                output = output + "mail ";
+                cur++;
+            }
+            if (userdata[3] == "" || userdata[3] == undefined) {
+                if (cur == count && isClear(userdata, 4) > 0) {
+                    output = output + "and ";
+                }
+                else { }
+                output = output + " address ";
+            }
+
+            output = output + "before exporting";
+            if (isClear(userdata, 5) == 0) {
+                console.log('Filled List has been detected');
+                output = 'All data has been entered! You can now export';
+                var table = document.getElementById("contenttable");
+                var row = table.insertRow(curTableInp);
+                curTableInp++;
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                currow++;
+                console.log('currow has been updated');
+                mainid1 = "x" + currow + "1";
+                cell1.innerHTML = "<td><button onclick='enterfirstname(mainid1)' id = 'testclass1' >Enter your first name</button></td>";
+                mainid2 = "x" + currow + "2";
+                cell2.innerHTML = "<td><button onclick='enterlastname(mainid2)' id = 'testclass2' >Enter your last name</button></td>";
+                mainid3 = "x" + currow + "3";
+                cell3.innerHTML = "<td><button onclick='entermail(mainid3)' id = 'testclass3' >Enter your mail</button></td>";
+                mainid4 = "x" + currow + "4";
+                cell4.innerHTML = "<td><button onclick='enteraddress(mainid4)' id = 'testclass4' >Enter your address</button></td>";
+                document.getElementById("testclass1").classList = mainid1;
+                document.getElementById("testclass2").classList = mainid2;
+                document.getElementById("testclass3").classList = mainid3;
+                document.getElementById("testclass4").classList = mainid4;
+                document.getElementById("testclass1").id = "dump";
+                document.getElementById("testclass2").id = "dump";
+                document.getElementById("testclass3").id = "dump";
+                document.getElementById("testclass4").id = "dump";
+            }
+            return output;
+        }
+        function eled() {
+            const row = prompt('Please specify the targeted elements row');
+            const column = prompt('Please specify the targeted elements column');
+            newid = 'x' + (row - 1) + (column);
+            curdoc = document.querySelectorAll("." + newid);
+            console.log(curdoc[0] + 'is curdoc0');
+            var table = document.getElementById("contenttable");
+            var rowcount = table.rows.length;
+            console.log(rowcount + 'is the row count');
+            if (curdoc == [] || curdoc[0] == undefined) {
+                console.log('That is not valid');
+                document.getElementById('genwarn').innerText = 'Warning: Entered Column / Row Combo does not exist. Please enter a valid combination!';
+            }
+            else if (row == rowcount - 1) {
+                console.log('That is not valid');
+                document.getElementById('genwarn').innerText = 'Warning: Please complete the chosen row before editing!';
+            }
+            else {
+                const inputname = prompt("What is your new element?");
+                alldata[column-1][row - 1] = inputname;
+                curdoc[0].innerText = inputname;
+                console.log(newid);
+                document.getElementById('genwarn').innerText = '';
+            }
+            send();
+        }
+        function deconstruct(id) {
+            out = id.toString().charAt(1)
+            console.log(id + " is id");
+            return out
+        }
+        function createrealalldata() {
+            head = [document.getElementById('headfirst').innerHTML, document.getElementById('headsecond').innerHTML, document.getElementById('headthird').innerHTML, document.getElementById('headfourth').innerHTML];
+            let realalldata = []
+            realalldata.push(head);
+            for (let i = 0; i < alldata[0].length; i++) {
+                console.log(alldata[0].length);
+                let innerlist = [];
+                for (let ii = 0; ii < alldata.length; ii++) {
+                    innerlist.push(alldata[ii][i])
+                }
+                realalldata.push(innerlist);
+                console.log('something happened');
+            }
+            console.log(realalldata);
+            return realalldata;
+        }
+        function send() {
+            let variable = createrealalldata();
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/login";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            //xhr.onload = function () {};
+
+            var data = new FormData();
+            data.append('user', 'person');
+            data.append('pwd', 'password');
+
+            let realdata = JSON.stringify(variable)
+
+            xhr.send(realdata);
+        }
+    </script>
+    <p id="outputid"></p>
+    <script>document.getElementById("outputid").innerHTML = output</script>
+    <button onclick="eled()">Edit an element</button>
+
+    <p id='genwarn'></p>
+
+    <button><a href="http://127.0.0.1:5000/myfile.txt" download="">Export this table</a></button>
+
+    <p>Todo:</p>
+    <p>Fix early myfiles: useless linebreaks</p>
+    <p>Implement login</p>
+    <p>Element editing by clicking on the element?</p>
+    <p>Implement central database</p>
+    <p>delete row</p>
+    <p>Add Column Feature</p>
+    <p>Log File</p>
+    <p>Write Check beim Start</p>
+
+</body>
+
+</html>
+
+<!-- 
+
+-->
