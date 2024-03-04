@@ -10,11 +10,19 @@ Die momentane Benutzung des Programmes:
 2.: Installer ausführen:
 - Im Downloadsordner sollte sich nun die Datei "python-(Version, z.B. 3.12.2)-amd64.exe" befinden. Dies ist der Installer. Diesen ausführen und den im Installation Fenster angegebenen Schritten folgen
 
-3.: Programm mit Python ausführen:
+3.: Bibliotheken installieren:
+- Das Python Programm benötigt Bibliotheken(externe importierbare Codestücke) um zu funktionieren
+- Windows: Win + R drücken(Win ist die Taste mit dem Windows Symbol)
+- Im "Ausführen" Fenster "cmd" eingeben(Dies öffnet die Systemkonsole)(Ohne " vor und nach dem Befehl)
+- Im Konsolenfenster "py -m pip install flask flask_oidc psycopg2" eingeben(Ohne " vor und nach dem Befehl)
+- Warten bis alles heruntergeladen ist
+- Bei Problemen: https://packaging.python.org/en/latest/tutorials/installing-packages/
+
+4.: Programm mit Python ausführen:
 - In die Programmdateien navigieren. Wurde der Ordner heruntergeladen und nicht bewegt so befindet sich die Datei in Downloads --> Flask
 - Im Ordner "Flask" befindet sich die Datei "app.py". Auf diese Rechtsklick --> Öffnen mit --> Python
 
-4.: Zur Programmseite navigieren:
+5.: Zur Programmseite navigieren:
 - Nach Schritt 3 sollte sich ein Konsolenfenster geöffnet haben
 - Im Konsolenfenster sollte irgendwo:
    "WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
