@@ -131,9 +131,10 @@
 
                     rowcount--
                     rowcount--
+                    save = addrowmode
                     addrowmode = 'last'
                     addrow('mor')
-                    addrowmode = 'fir'
+                    addrowmode = save
                 }
                 loadArray('row')
                 if (mode != 'nonnor') { con() }
@@ -204,8 +205,28 @@
                 resu = fr.result;
                 console.log(resu);
 
-                //Einfach hier einlesen
-                //Resu ist ein String
+                curword = ''
+                currow = []
+                full = []
+                for(let i=0;i<resu.length;i++){
+                    if(resu[i]!=',' && !resu[i].includes('\n') && !resu[i].includes('\r')){
+                        curword = curword + resu[i]
+                    }
+                    else if(resu[i].includes('\n')){
+                        currow.push(curword)
+                        curword = ''
+                        full.push(currow)
+                        console.log(currow + ' was pushed')
+                        currow =[]
+                    }
+                    else if(resu[i].includes('\r')){ }
+                    else{
+                        currow.push(curword)
+                        curword = ''
+                    }
+                }
+                console.log(full)
+                loadmyArray(full)
             })
         }
         function dosmthdragover(ev) {
@@ -270,7 +291,9 @@
                 for (let i = 1; i < bua.length + 1; i++) {
                     for (let ii = 1; ii < bua[0].length + 1; ii++) {
                         loadid = 'x' + i + 'x' + ii
-                        document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
+                        save = bua[i - 1][ii - 1]
+                        save = save.replace(/ü/g,'ü')
+                        document.querySelectorAll('.' + loadid)[0].value = save
                     }
                 }
             }
@@ -319,9 +342,9 @@
                     currow = document.querySelectorAll("." + id)
                     curval = currow[0].value
                     if (curval != "") {
-                        curval = curval.replace('ä', 'ae')
-                        curval = curval.replace('ö', 'oe')
-                        curval = curval.replace('ü', 'ue')
+                        curval = curval.replace('ä','ae')
+                        curval = curval.replace('ö','oe')
+                        curval = curval.replace('ü','ue')
                         datarow.push(curval)
                     }
                     else {
@@ -378,7 +401,6 @@
                     wstar = true
                 }
                 else if (resp[i] == "'" && wstar == true) {
-                    //curword = curword.replace('\u00e4','ä')
                     currow.push(curword)
                     curword = ""
                     wstar = false
@@ -461,9 +483,6 @@
                     currow = document.querySelectorAll("." + id)
                     curval = currow[0].value
                     if (curval != "") {
-                        curval = curval.replace('ä', 'ae')
-                        curval = curval.replace('ö', 'oe')
-                        curval = curval.replace('ü', 'ue')
                         datarow.push(curval)
                     }
                     else {
@@ -559,7 +578,6 @@
     <p>Find better solution for special character: Replace unistring instead of simplifying</p>
     <p>Do a write check at start</p>
     <p>Programm in ein Virtual Env packen?</p>
-    <p>Implement analysis of dropped element -> Load</p>
     <p>Automatically select gender based on namedata from a database?</p>
     <p>Use Checkmk</p>
 </body>

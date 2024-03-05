@@ -284,7 +284,7 @@ def loginnow():
     return render_template('form.html')'''
 
 @app.route("/<string:filename>")
-#@oidc.require_login
+@oidc.require_login
 def givefile(filename):
     return send_file(filename)
 
