@@ -1,7 +1,7 @@
-Vorname,Nachname,Name,Beschaeftigung
-Noah,Jubelius,Elesio,FwJ / Praktikum
-Zinedine,Ghoudan,Nadoriana,Ausbildung
-Fabian,Fuchs,FabulousFox,Ausbildung
-Frederik,van Eickels,Superfredi,Studium
-Tobias,Foerster,Antiunkraut,Studium
-Ricardo,Rehborg,Mortis,Duales Studium
+Vorname,Nachname,Name,Beschaeftigung,Wohnort,Catgirliness,Feld
+Noah,Jubelius,Elesio,FwJ / Praktikum,Hoerde,++,Informatik
+Zinedine,Ghoudan,Nadoriana,Ausbildung,Loetringhausen,~,Informatik
+Fabian,Fuchs,FabulousFox,Ausbildung,Dortmund,+,Informatik
+Frederik,van Eickels,Superfredi,Studium,Juelich,~,Informatik
+Tobias,Foerster,Antiunkraut,Studium,Bayreuth,-,Wirtschaft
+Ricardo,Rehborg,Mortis,Duales Studium,Dortmund,~,Informatik

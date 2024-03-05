@@ -21,11 +21,15 @@
     </p>
     </p>
     <script>
+        let vertmode='neut'
+        let horzmode='neut'
         let addrowmode = 'last'
         let delrowmode = 'last'
         let addcolumnmode = 'last'
         let delcolumnmode = 'last'
+        let buttonsopen = false
         let settingsopen = false
+        let horzbuttonsopen = false
         let backupArray = []
         let rowcount = 1
         let columncount = 4
@@ -65,7 +69,8 @@
                 loadArray('nor')
             }
             else if (addrowmode == 'cus') {
-                console.log('cus-interactions have not yet been implemented for this action')
+                mode = 'Place'
+                horztogglebuttonfield(mode)
             }
         }
         function addcol(mode) {
@@ -94,13 +99,14 @@
                 addcol('nonnor')
                 addcolumnmode = 'fir'
                 for (let i = 0; i < bua.length; i++) {
-                    bua[i].splice(1, 0, "")
+                    bua[i].splice(0, 0, "")
                 }
                 backupArray = bua
                 loadArray('nor')
             }
             else if (addcolumnmode == 'cus') {
-                console.log('cus-interactions have not yet been implemented for this action')
+                mode = 'Place'
+                togglebuttonfield(mode)
             }
         }
         function delrow(mode) {
@@ -150,7 +156,8 @@
                 loadArray('nor')
             }
             else if (delrowmode == 'cus') {
-                console.log('cus-interactions have not yet been implemented for this action')
+                mode = '-Cut-'
+                horztogglebuttonfield(mode)
             }
         }
         function delcol(mode) {
@@ -175,22 +182,20 @@
                 if (mode != "nonnor") { con() }
             }
             else if (delcolumnmode == 'fir') {
-                console.log('fir-interactions have not yet been implemented for this action')
-                console.log('con() for backup --> do normal column removal --> remove column at index 1 from bua --> load bua')
-
                 con()
                 bua = backupArray
                 delcolumnmode = 'last'
                 delcol('nonnor')
                 delcolumnmode = 'fir'
                 for (let i = 0; i < bua.length; i++) {
-                    bua[i].splice(1, 1)
+                    bua[i].splice(0, 1)
                 }
                 backupArray = bua
                 loadArray('nor')
             }
             else if (delcolumnmode == 'cus') {
-                console.log('cus-interactions have not yet been implemented for this action')
+                mode = '-Cut-'
+                togglebuttonfield(mode)
             }
         }
         function dosmthfile(ev) {
@@ -291,9 +296,7 @@
                 for (let i = 1; i < bua.length + 1; i++) {
                     for (let ii = 1; ii < bua[0].length + 1; ii++) {
                         loadid = 'x' + i + 'x' + ii
-                        save = bua[i - 1][ii - 1]
-                        save = save.replace(/ü/g,'ü')
-                        document.querySelectorAll('.' + loadid)[0].value = save
+                        document.querySelectorAll('.' + loadid)[0].value = bua[i - 1][ii - 1]
                     }
                 }
             }
@@ -458,6 +461,73 @@
                 console.log('delcolumnmode is now ' + cur)
             }
         }
+        function togglebuttonfield(mode){
+            if(buttonsopen==false){
+                buttonsopen = true
+                cont = ''
+                for(let i=0;i<columncount;i++){
+                    unid = 'verx' + i
+                    cont = cont + '<button id="' + unid + '" onclick = vertresponse(' + i + ',"' + mode + '")>' + mode +' a column at index ' + i +'</button>'
+                }
+                document.getElementById("buttonfield").innerHTML=cont
+            }
+            else{
+                buttonsopen = false
+                document.getElementById("buttonfield").innerHTML=''
+            }
+        }
+        function vertresponse(column, mode){
+            if(mode=="Place"){
+                console.log('The button linked with column ' + column + ' was executed')
+                con()
+                bua = backupArray
+                addcolumnmode = 'last'
+                addcol('nonnor')
+                addcolumnmode = 'fir'
+                for (let i = 0; i < bua.length; i++) {
+                    bua[i].splice(column, 0, "")
+                }
+                backupArray = bua
+                loadArray('nor')
+            }
+            else{
+                con()
+                bua = backupArray
+                delcolumnmode = 'last'
+                delcol('nonnor')
+                delcolumnmode = 'fir'
+                for (let i = 0; i < bua.length; i++) {
+                    bua[i].splice(column, 1)
+                }
+                backupArray = bua
+                loadArray('nor')
+            }
+            horzbuttonsopen = false
+            togglebuttonfield(mode)
+            togglebuttonfield(mode)
+        }
+        function horztogglebuttonfield(mode){
+            if(horzbuttonsopen==false){
+                horzbuttonsopen = true
+                ellist = document.querySelectorAll(".ffield")
+                console.log(ellist)
+                con()
+                for(let i=0;i<ellist.length;i++){
+                    unid = 'horx' + i
+                    save = ellist[i].innerHTML
+                    ellist[i].innerHTML = save + '<button class="horzbut" id="' + unid + '">' + mode + ' a row at index ' + i + '</button>'
+                    //For every row element: Get into the HTML and place a button on the right side
+                }
+                loadArray('nor')
+            }
+            else{
+                horzbuttonsopen = false
+                ellist = document.querySelectorAll(".horzbut")
+                for(let i = 0;i<ellist.length;i++){
+                    ellist[i].outerHTML=''
+                }
+            }
+        }
     </script>
     <button onclick="addrow('nor')">Add Row</button>
     <button onclick="addcol('nor')">Add Column</button>
@@ -570,6 +640,7 @@
     </script>
 
     <p id="settingsfield"></p>
+    <p id="buttonfield"></p>
 
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
@@ -597,7 +668,9 @@ https://www.youtube.com/watch?v=EGqWS7HCboA
 https://www.youtube.com/watch?v=Cdx73SndLYc
 https://www.youtube.com/watch?v=J-_KnNpZoE0
 
-g7mhnZfbbOk
+g7mhnZfbbOk -> Kein Ahnung aber falls mal ein Passwort fehlt das hier probieren
+
+Docker Container starten -> docker run --name keycloak -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=g00dadminpassword quay.io/keycloak/keycloak:latest start-dev -> In die Konsole
 
 Docker Container läuft -> Auf 127.0.0.1:8080/realms/ProgrammRealm/account gehen
 Account erstellen
@@ -605,6 +678,4 @@ Account erstellen
 erd@lg-do.de
 
 elesio password: 12345687
-
-docker run --name keycloak -d -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=g00dadminpassword quay.io/keycloak/keycloak:latest start-dev
 -->
