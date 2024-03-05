@@ -1,19 +1,7 @@
-from flask import Flask
-from flask import render_template
-import logging
-from flask import url_for
-from flask import redirect
-from flask import request
-from flask import jsonify
-from flask import make_response
-from flask import send_file
-from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
-import os
-import json
-import requests
+from flask import Flask, render_template, url_for, redirect, request, send_file
 from flask_oidc import OpenIDConnect
+import os
 import psycopg2
-from flask import session
 
 app = Flask(__name__)
 
