@@ -515,7 +515,7 @@
                 for(let i=0;i<ellist.length;i++){
                     unid = 'horx' + i
                     save = ellist[i].innerHTML
-                    ellist[i].innerHTML = save + '<button class="horzbut" id="' + unid + '">' + mode + ' a row at index ' + i + '</button>'
+                    ellist[i].innerHTML = save + '<button onclick=horzresponse(' + i + ',"' + mode + '") class="horzbut" id="' + unid + '">' + mode + ' a row at index ' + i + '</button>'
                     //For every row element: Get into the HTML and place a button on the right side
                 }
                 loadArray('nor')
@@ -526,6 +526,58 @@
                 for(let i = 0;i<ellist.length;i++){
                     ellist[i].outerHTML=''
                 }
+            }
+        }
+        function horzresponse(row,mode){
+            console.log('User interacted with row ' + row + ' using mode ' + mode)
+            if(mode=='Place'){
+                con()
+                addrowmode = 'last'
+                addrow('nor')
+                addrowmode = 'cus'
+                content = []
+                for (let i = 1; i < columncount + 1; i++) {
+                    inp = ""
+                    content.push(inp)
+                }
+                bua = backupArray
+                bua.splice(row, 0, content)
+                backupArray = bua
+                loadArray('nor')
+            }
+            else{
+                con()
+                delrowmode = 'last'
+                delrow('nonnor')
+                delrowmode = 'cus'
+                bua = backupArray
+                bua.splice(row, 1)
+                backupArray = bua
+                loadArray('nor')
+            }
+            buttonsopen = false
+            horztogglebuttonfield(mode)
+            horztogglebuttonfield(mode)
+        }
+        function writefile(){
+            var xhr = new XMLHttpRequest();
+            var url = "http://127.0.0.1:5000/write";
+            var method = 'POST';
+
+            xhr.open(method, url);
+            xhr.setRequestHeader('Access-Control-Allow-Origin', '*')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.onload = function () { oncheckresp(this.response); dataget()};
+
+            let realdata = JSON.stringify('dummydata')
+
+            xhr.send(realdata);
+        }
+        function oncheckresp(response){
+            console.log(response)
+            if(response == 'forced to "wass up bros"'){
+                console.log('shit happened')
+                document.getElementById("writewarn").innerHTML = 'Warning: This folder has been write-locked by a server admin! The Programm might not work correctly like this, please ask the responsible admin to remove the write-lock on the programm files'
             }
         }
     </script>
@@ -635,19 +687,19 @@
             }
         }
         function dostart() {
-            dataget()
+            writefile()
         }
     </script>
 
     <p id="settingsfield"></p>
     <p id="buttonfield"></p>
+    
+    <p id="writewarn"></p>
 
     <p ondrop="dosmthfile(event)" ondragover="dosmthdragover(event)">Drag a file here!</p>
 
     <p>Todo:</p>
-    <p>Implement cus-interactions(Prompt? Visual with buttons?)</p>
     <p>Find better solution for special character: Replace unistring instead of simplifying</p>
-    <p>Do a write check at start</p>
     <p>Programm in ein Virtual Env packen?</p>
     <p>Automatically select gender based on namedata from a database?</p>
     <p>Use Checkmk</p>

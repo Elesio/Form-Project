@@ -32,6 +32,17 @@ app.config.update({
 
 oidc = OpenIDConnect(app)
 
+@app.route('/write',methods=['POST'])
+def write():
+    fusefile = app.root_path + '\h.txt'
+    try:    
+        with open(fusefile, 'w+') as fo:
+            fo.write("haaaai stay silly guuurl")
+            fo.close()
+        return 'haaaaaaaaaaii pookie :3'
+    except:
+        return 'forced to "wass up bros"'
+
 @app.route('/loging')
 def loging():
     return redirect(url_for('oidc_auth.login'))
