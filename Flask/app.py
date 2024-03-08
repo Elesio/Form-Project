@@ -5,6 +5,8 @@ import psycopg2
 
 app = Flask(__name__)
 
+basicurl = "http://127.0.0.1:5000"
+
 app.config.update({
     'SECRET_KEY': 'SI5Yk0YbLbscfsxBijYEM4VyLylQozB3',
     'TESTING': True,
@@ -50,7 +52,7 @@ def start():
     if(oidc.user_loggedin==True):
         return render_template("login.html")
     else:
-        nice = 'You are not logged in! <button><a href="http://127.0.0.1:5000/loging">Login</a></button>'
+        nice = 'You are not logged in! <button><a href="' + basicurl + '/loging">Login</a></button>'
         just = False
         return nice
         #return redirect(url_for('oidc_auth.login'))
