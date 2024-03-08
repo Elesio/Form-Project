@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script>
+        var basicurl = "http://127.0.0.1:5000"
+    </script>
 </head>
 
 <body onload="dostart()">
@@ -241,7 +244,7 @@
         function usefile() {
             usefilepath = 'C:/Users/Noah/Downloads/myfile.txt'
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/fileinp";
+            var url = basicurl + "/fileinp";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -320,7 +323,7 @@
         function datafile() {
             usefilepath = 'hentai'
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/d";
+            var url = basicurl + "/d";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -358,7 +361,7 @@
             }
             console.log(dataArray + ' is dataArray')
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/data";
+            var url = basicurl + "/data";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -372,7 +375,7 @@
         }
         function dataget() {
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/getdata";
+            var url = basicurl + "/getdata";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -561,7 +564,7 @@
         }
         function writefile(){
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/write";
+            var url = basicurl + "/write";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -615,7 +618,7 @@
             }
 
             var xhr = new XMLHttpRequest();
-            var url = "http://127.0.0.1:5000/login";
+            var url = basicurl + "/login";
             var method = 'POST';
 
             xhr.open(method, url);
@@ -707,17 +710,11 @@
 </html>
 
 <!-- 
-https://youtu.be/Vo7n4j3OrNs?si=n8jOgfcF8d2F6vfL
-https://www.youtube.com/watch?v=jxEMUNHFMCI
-https://www.youtube.com/watch?v=jfKfPfyJRdk
 https://www.youtube.com/watch?v=bnkMsmwCRco
 https://www.youtube.com/watch?v=SxFxDpCswW4
-https://www.youtube.com/watch?v=N-wIPwEhQOY
-
 https://www.youtube.com/watch?v=56KHX6tMZ0g
 https://www.youtube.com/watch?v=EGqWS7HCboA
 https://www.youtube.com/watch?v=Cdx73SndLYc
-https://www.youtube.com/watch?v=J-_KnNpZoE0
 
 g7mhnZfbbOk -> Kein Ahnung aber falls mal ein Passwort fehlt das hier probieren
 
